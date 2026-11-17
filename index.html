@@ -158,7 +158,15 @@ h3 { font: 700 13px var(--font-display); letter-spacing: .08em; text-transform: 
 .gauge .lvbg { fill: var(--surface-2); }
 .gauge .lv { fill: var(--ok); }
 .mhint { text-align: center; font: 700 14px var(--font-display); min-height: 20px; }
-.mbtns { display: flex; flex-wrap: wrap; gap: 8px; }
+.mic-wrap { display: flex; justify-content: center; padding: 2px 0; }
+.mic-fab { width: 64px; height: 64px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line); display: grid; place-items: center; box-shadow: var(--shadow); position: relative; transition: background .2s, transform .1s; }
+.mic-fab:active { transform: scale(.94); }
+.mic-fab svg { width: 28px; height: 28px; fill: none; stroke: var(--fg); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.mic-fab[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); }
+.mic-fab[aria-pressed="true"] svg { stroke: #fff; }
+.mic-fab[aria-pressed="true"]::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--brand); opacity: .55; animation: micPulse 1.6s ease-out infinite; }
+@keyframes micPulse { from { transform: scale(.92); opacity: .6; } to { transform: scale(1.25); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .mic-fab[aria-pressed="true"]::after { animation: none; } }
 .mic-btn[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
 .mhead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
 .mhead h3 { margin: 0; }
@@ -374,9 +382,8 @@ header { position: relative; justify-content: center; min-height: 46px; }
       <div class="mhead"><h3>Afinador</h3><span id="mSrc"></span></div>
       <div class="gauge idle" id="gauge"></div>
       <div class="mhint" id="mHint"></div>
-      <div class="mbtns">
-        <button class="mic-btn" id="micBtn">Usar microfone</button>
-        <button class="mic-btn" id="demoBtn">Ver demonstração</button>
+      <div class="mic-wrap">
+        <button class="mic-fab" id="micBtn" aria-pressed="false" aria-label="Ligar o microfone" title="Ligar o microfone"></button>
       </div>
       <p class="tip" id="micMsg" style="text-align:left"></p>
     </section>
@@ -804,6 +811,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   /* ---------- painel ---------- */
   var elKey = document.getElementById("keycard"), elChords = document.getElementById("chords"), elProgs = document.getElementById("progs");
   var PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+  var STOP = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>';
 
   function paintPanel() {
     var info = keyInfo(), roles = ROLE[st.mode], nums = NUM[st.mode];
@@ -828,7 +836,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
         seq.map(function (d, n) {
           var c = info.chords[d];
           return (n ? "<s>›</s>" : "") + '<span class="cell"><b>' + chordName(c.root, c.q) + '</b><small>' + roman(d, c.q) + '</small></span>';
-        }).join("") + '</span>' + PLAY + '</button>';
+        }).join("") + '</span>' + (i === busy ? STOP : PLAY) + '</button>';
     }).join("");
   }
   /* card da tonalidade: cada nota da escala toca sozinha, e o botão Escala toca todas */
@@ -842,7 +850,9 @@ header { position: relative; justify-content: center; min-height: 46px; }
   function actChord(b) { if (b.dataset.scale) playScale(); else playChord(+b.dataset.d); }
   onTap(elChords, function (t) { var b = t.closest("button"); if (b) actChord(b); });
   elProgs.addEventListener("click", function (e) {
-    var b = e.target.closest(".prog"); if (b) playProg(+b.dataset.p);
+    var b = e.target.closest(".prog"); if (!b) return;
+    var i = +b.dataset.p;
+    if (busy === i) { stopAll(); paintPanel(); } else playProg(i);   /* tocar de novo na que está tocando, para parar */
   });
 
   /* ---------- render ---------- */
@@ -927,7 +937,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
 
   /* ---------- afinador ----------
      Feito para o microfone: ele ouve o instrumento, descobre a nota (detectPitch) e move a agulha do velocímetro.
-     Nesta prévia o navegador não libera o microfone, então há um botão de demonstração com valores simulados. */
+     O ícone do microfone liga e desliga a escuta. */
   var TUNINGS = {
     violao: { n: "Violão", s: [40, 45, 50, 55, 59, 64] },
     baixo: { n: "Baixo", s: [28, 33, 38, 43] },
@@ -937,7 +947,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   };
   var PCS = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
   var tn = { inst: "violao", bs: 4, a4: 440 /* padrão dos afinadores: lá = 440 Hz */, src: "off", hit: -1 };
-  var an = null, anBuf = null, micStream = null, micSrc = null, meterTimer = 0, demoTimer = 0, gaugeBuilt = false;
+  var an = null, anBuf = null, micStream = null, micSrc = null, meterTimer = 0, gaugeBuilt = false;
   function noteName(m) { var p = PCS[((m % 12) + 12) % 12]; return st.nt === "sol" ? SOL[p[0]] + p.slice(1) : p; }
   function octOf(m) { return Math.floor(m / 12) - 1; }
   function tnFreq(m) { return tn.a4 * Math.pow(2, (m - 69) / 12); }
@@ -1093,21 +1103,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     trkReset();
   }
 
-  /* demonstração: a agulha parte de uma corda desafinada e vai se acertando (valores simulados) */
-  function demoStop() { clearInterval(demoTimer); demoTimer = 0; if (tn.src === "demo") tn.src = "off"; }
-  function demoStart() {
-    demoStop(); if (tn.src === "mic") micStop();
-    tn.src = "demo";
-    var S = tuning().s, f = tnFreq(S[Math.min(1, S.length - 1)]), t = 0;
-    demoTimer = setInterval(function () {
-      t += 0.05;
-      if (t > 6.5) { demoStop(); paintTuner(); paintMeter(null); return; }
-      var c = -42 * Math.exp(-t / 1.5) * Math.cos(2.4 * t) + (Math.random() - 0.5) * 1.2;
-      paintMeter({ freq: f * Math.pow(2, c / 1200) }, 0.55 + Math.random() * 0.25);
-    }, 50);
-    paintTuner();
-  }
-
+  var MIC_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"/></svg>';
   function paintTuner() {
     var T = tuning(), n = T.s.length;
     document.getElementById("tnTitle").textContent = T.n;
@@ -1119,31 +1115,29 @@ header { position: relative; justify-content: center; min-height: 46px; }
       return '<div class="str' + (tn.hit === i ? " on" : "") + '"><i>' + (n - i) + 'ª</i><b>' + noteName(m) + '</b><small>' + Math.round(tnFreq(m)) + ' Hz</small></div>';
     }).join("");
     Array.prototype.forEach.call(document.querySelectorAll("[data-ti]"), function (b) { b.setAttribute("aria-pressed", b.dataset.ti === tn.inst); });
-    document.getElementById("mSrc").textContent = tn.src === "mic" ? "Ouvindo: microfone" : tn.src === "demo" ? "Demonstração (valores simulados)" : "Aguardando o microfone";
-    var mb = document.getElementById("micBtn"); mb.textContent = tn.src === "mic" ? "Parar microfone" : "Usar microfone"; mb.setAttribute("aria-pressed", tn.src === "mic");
-    var db = document.getElementById("demoBtn"); db.textContent = tn.src === "demo" ? "Parar demonstração" : "Ver demonstração";
+    document.getElementById("mSrc").textContent = tn.src === "mic" ? "Ouvindo: microfone" : "Microfone desligado";
+    var mb = document.getElementById("micBtn"), on = tn.src === "mic";
+    if (!mb.firstChild) mb.innerHTML = MIC_ICON;
+    mb.setAttribute("aria-pressed", on);
+    mb.setAttribute("aria-label", on ? "Desligar o microfone" : "Ligar o microfone"); mb.title = on ? "Desligar o microfone" : "Ligar o microfone";
     var msg = document.getElementById("micMsg");
     if (!msg.dataset.err) msg.textContent = tn.src === "mic"
       ? "Toque uma corda do seu instrumento. A agulha mostra o quanto ela está longe da nota."
-      : "Toque uma corda perto do microfone e a agulha mostra se ela está afinada. Nesta prévia o microfone não liga, então use a demonstração.";
+      : "Toque no ícone do microfone para ligar. Depois toque uma corda perto do aparelho e a agulha mostra se ela está afinada.";
   }
   Array.prototype.forEach.call(document.querySelectorAll("[data-ti]"), function (b) {
-    b.onclick = function () { tn.inst = b.dataset.ti; tn.hit = -1; paintTuner(); if (tn.src === "demo") demoStart(); else paintMeter(null); };
+    b.onclick = function () { tn.inst = b.dataset.ti; tn.hit = -1; paintTuner(); paintMeter(null); };
   });
   Array.prototype.forEach.call(document.querySelectorAll("[data-bs]"), function (b) {
-    b.onclick = function () { tn.bs = +b.dataset.bs; tn.hit = -1; paintTuner(); if (tn.src === "demo") demoStart(); else paintMeter(null); };
+    b.onclick = function () { tn.bs = +b.dataset.bs; tn.hit = -1; paintTuner(); paintMeter(null); };
   });
   document.getElementById("micBtn").onclick = function () {
     var msg = document.getElementById("micMsg");
     if (tn.src === "mic") { micStop(); delete msg.dataset.err; paintTuner(); paintMeter(null); return; }
-    demoStop();
     micStart().then(function () { delete msg.dataset.err; paintTuner(); }).catch(function () {
       msg.dataset.err = "1"; paintTuner();
-      msg.textContent = "O microfone não está disponível nesta prévia. Quando o app estiver instalado, este botão liga o microfone e a agulha passa a seguir o seu instrumento.";
+      msg.textContent = "Não consegui ligar o microfone. Permita o acesso ao microfone nas configurações do navegador e toque no ícone de novo.";
     });
-  };
-  document.getElementById("demoBtn").onclick = function () {
-    if (tn.src === "demo") { demoStop(); paintTuner(); paintMeter(null); } else demoStart();
   };
 
   function showTab(t) {
@@ -1154,7 +1148,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     document.getElementById("subTxt").textContent = t === "circle" ? "Toque em uma tonalidade e a roda gira." : "Toque uma corda e veja a agulha.";
     stopAll();
     if (t === "tuner") { buildGauge(); paintTuner(); paintMeter(null); startMeter(); }
-    else { stopMeter(); demoStop(); if (tn.src === "mic") micStop(); }
+    else { stopMeter(); if (tn.src === "mic") micStop(); }
   }
   document.getElementById("tab-circle").onclick = function () { showTab("circle"); };
   document.getElementById("tab-tuner").onclick = function () { showTab("tuner"); };
