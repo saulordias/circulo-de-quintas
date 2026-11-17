@@ -67,7 +67,9 @@ img { max-width: 100%; }
 body { background: var(--bg); color: var(--fg); font: 15px/1.45 var(--font-body); padding-block: 16px 40px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .app { max-width: 460px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
-button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+html, body, button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; -webkit-tap-highlight-color: transparent; }
+button:focus:not(:focus-visible) { outline: none; }
 body, button, .seg { touch-action: manipulation; }
 button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 .seg, .seg:focus { outline: none; }
@@ -417,7 +419,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   var st = { p: 0, mode: "M", nt: "cifra", style: "pop", inst: "teclado", rhythm: "livre", bpm: 90, batida: "basica" };
   try { var savedI = localStorage.getItem("cq-inst"); if (["teclado", "violao", "baixo", "orgao"].indexOf(savedI) >= 0) st.inst = savedI; } catch (e) {}
   try { var saved = localStorage.getItem("cq-nt"); if (saved === "sol" || saved === "cifra") st.nt = saved; } catch (e) {}
-  var rotDeg = 0, playing = -1, scaleIdx = -1, busy = -1, timers = [];
+  var rotDeg = 0, playing = -1, scaleIdx = -1, scalePlay = false, busy = -1, timers = [];
 
   /* ---------- teoria ---------- */
   function parse(n) { return { l: n[0], a: n.length > 1 ? (n[1] === "♯" ? 1 : -1) : 0 }; }
@@ -713,7 +715,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     else tone(m, t, dur, vol);
   }
   function stopAll() {
-    timers.forEach(clearTimeout); timers = []; playing = -1; scaleIdx = -1; busy = -1; cutSound();
+    timers.forEach(clearTimeout); timers = []; playing = -1; scaleIdx = -1; scalePlay = false; busy = -1; cutSound();
   }
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
 
@@ -723,11 +725,13 @@ header { position: relative; justify-content: center; min-height: 46px; }
   }
   function playScale() {
     var info = keyInfo(); stopAll(); var a = audio(); if (!a) return;
+    scalePlay = true;
     info.scaleMidi.forEach(function (n, i) {
       playNote(n, a.currentTime + i * 0.3, 1.8, 0.2);
       later(function () { scaleIdx = i % 7; paintPanel(); }, i * 300);
     });
-    later(function () { scaleIdx = -1; paintPanel(); }, 8 * 300 + 150);
+    later(function () { scaleIdx = -1; scalePlay = false; paintPanel(); }, 8 * 300 + 150);
+    paintPanel();
   }
   /* batidas clássicas, em colcheias. Cada padrão tem a mão do acorde (ch) e as notas graves (bs).
      ch: D = acorde para baixo, U = acorde curto e leve (para cima), - = pausa.
@@ -817,7 +821,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     var info = keyInfo(), roles = ROLE[st.mode], nums = NUM[st.mode];
     elKey.innerHTML =
       '<div class="key-top"><div><h2 class="key-title">' + fmt(info.tonic) + (st.mode === "M" ? " maior" : " menor") + '</h2><p class="sig">' + info.sig + '</p></div>' +
-      '<button class="scale-btn" data-scale="1">' + PLAY + 'Escala</button></div>' +
+      '<button class="scale-btn" data-scale="1">' + (scalePlay ? STOP : PLAY) + (scalePlay ? "Parar" : "Escala") + '</button></div>' +
       '<div class="notes">' + info.scale.map(function (n, i) { return '<button class="' + (i === scaleIdx ? "on" : "") + '" data-n="' + i + '">' + fmt(n) + '</button>'; }).join("") + '</div>';
     var h = info.chords.map(function (c, d) {
       return '<button class="chord' + (d === playing ? " playing" : "") + '" data-d="' + d + '" style="--c:var(--' + roles[d] + ');--ct:var(--' + roles[d] + '-t)">' +
@@ -845,7 +849,10 @@ header { position: relative; justify-content: center; min-height: 46px; }
     stopAll(); playNote(info.scaleMidi[i], a.currentTime, 1.8, 0.2);
     scaleIdx = i; paintPanel(); later(function () { scaleIdx = -1; paintPanel(); }, 500);
   }
-  function actKey(b) { if (b.dataset.scale) playScale(); else if (b.dataset.n) playScaleNote(+b.dataset.n); }
+  function actKey(b) {
+    if (b.dataset.scale) { if (scalePlay) { stopAll(); paintPanel(); } else playScale(); }   /* tocar de novo, para parar */
+    else if (b.dataset.n) playScaleNote(+b.dataset.n);
+  }
   onTap(elKey, function (t) { var b = t.closest("button"); if (b) actKey(b); });
   function actChord(b) { if (b.dataset.scale) playScale(); else playChord(+b.dataset.d); }
   onTap(elChords, function (t) { var b = t.closest("button"); if (b) actChord(b); });
