@@ -1,11 +1,13 @@
 /* Service worker do Círculo de Quintas: guarda o app no aparelho para abrir sem internet.
    Ao mudar qualquer arquivo do app, aumente a VERSION para os aparelhos baixarem a versão nova. */
-const VERSION = "v11";
+const VERSION = "v20";
 const CACHE = "cq-" + VERSION;
 const ASSETS = [
   "./", "index.html", "manifest.webmanifest",
   "assets/fonts/fonts.css", "assets/fonts/dm-sans-400.woff2", "assets/fonts/sora-600.woff2", "assets/fonts/old-standard-tt-700.woff2",
   "assets/lib/webaudio-tinysynth.min.js",
+  "drums/LICENSE.txt", "drums/drum_bass_hard.flac", "drums/drum_bass_soft.flac", "drums/drum_heavy_kick.flac", "drums/drum_snare_hard.flac", "drums/drum_snare_soft.flac",
+  "drums/drum_cymbal_closed.flac", "drums/drum_cymbal_pedal.flac", "drums/drum_cymbal_open.flac", "drums/drum_cymbal_soft.flac", "drums/drum_tom_hi_soft.flac", "drums/drum_tom_mid_soft.flac", "drums/drum_tom_lo_soft.flac",
   "licenses/index.html", "privacidade/index.html", "licenses/apache-2.0.txt", "licenses/sora-OFL.txt", "licenses/dm-sans-OFL.txt", "licenses/old-standard-tt-OFL.txt",
   "icons/favicon.svg", "icons/favicon-32.png", "icons/apple-touch-icon.png",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png"

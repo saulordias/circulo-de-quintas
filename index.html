@@ -209,6 +209,22 @@ header { position: relative; justify-content: center; min-height: 46px; }
 .rhythm .pill button { flex: 1; padding: 8px 2px; font-size: 12.5px; }
 .bats { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 6px; margin-bottom: 10px; }
 .bat { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 7px 10px; min-width: 0; }
+.dd { position: relative; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.dd-btn { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); text-align: left; box-shadow: var(--shadow); }
+.dd-btn[aria-expanded="true"] { border-color: var(--brand); }
+.dd-name { font: 800 14px var(--font-display); }
+.dd-pat { margin-left: auto; font: 500 12px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; color: var(--muted); letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dd-btn .chev { width: 16px; height: 16px; flex: none; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s; }
+.dd-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.dd-list { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 40; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 6px; display: grid; gap: 4px; max-height: 70vh; overflow: auto; box-shadow: 0 12px 32px rgba(0, 0, 0, .4); }
+.dd-opt { text-align: left; padding: 9px 12px; border-radius: 12px; border: 1px solid transparent; display: grid; gap: 1px; }
+.dd-opt:active { background: var(--surface-2); }
+.dd-opt[aria-selected="true"] { background: var(--surface-2); border-color: var(--brand); }
+.dd-opt b em { font: 500 11px var(--font-body); font-style: normal; color: var(--muted); margin-left: 6px; }
+.dd-opt b { font: 700 13px var(--font-display); }
+.dd-opt span { font: 500 12.5px/1.3 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; color: var(--muted); letter-spacing: .06em; white-space: nowrap; }
+.dd-opt[aria-selected="true"] span { color: var(--brand); }
+.dd-list .bat-key { grid-column: auto; margin: 4px 6px 2px; }
 .bat-h, .bat-key { grid-column: 1 / -1; }
 .bat-key { margin: 0; font-size: 12px; color: var(--muted); }
 .bat b { display: block; font: 700 13px var(--font-display); }
@@ -218,6 +234,41 @@ header { position: relative; justify-content: center; min-height: 46px; }
 .tempo { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .tempo input { flex: 1; min-width: 0; accent-color: var(--brand); }
 .tempo output { font: 700 13px var(--font-display); min-width: 58px; text-align: right; font-variant-numeric: tabular-nums; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.opts .opt { padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font: 700 13px var(--font-display); color: var(--muted); }
+.opts .opt[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+.beatbox { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; padding: 8px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; min-height: 22px; }
+.beat-txt { font: 700 12px var(--font-display); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.beats { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 22px; }
+.beats i { width: 14px; height: 14px; border-radius: 50%; background: var(--seg); transition: background .08s, transform .08s; }
+.beats i:first-child { width: 18px; height: 18px; }
+.beats i.on { background: var(--brand); transform: scale(1.25); }
+.beats i.cnt { background: var(--dom); transform: scale(1.25); }
+.mt-play { width: 64px; height: 64px; flex: none; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line); display: grid; place-items: center; }
+.mt-play svg { width: 28px; height: 28px; fill: var(--fg); }
+.mt-play[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); }
+.mt-play[aria-pressed="true"] svg { fill: #fff; }
+.mt-bpm { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.mt-bpm output { font: 800 34px/1 var(--font-display); min-width: 62px; text-align: center; font-variant-numeric: tabular-nums; }
+.mt-bpm small { color: var(--muted); font-size: 12px; margin-left: -6px; }
+.mt-bpm button { width: 34px; height: 34px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line); font: 800 18px/1 var(--font-body); }
+.mt-tap { padding: 10px 16px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); font: 700 13px var(--font-display); }
+.mt-tap:active { background: var(--brand); color: #fff; }
+.mt-stage { display: grid; gap: 12px; justify-items: center; }
+.mt-stage svg { width: min(100%, 200px); height: auto; display: block; }
+.mt-name { font: 700 13px var(--font-display); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: -4px; }
+.mt-stage input[type="range"] { width: 100%; max-width: 320px; accent-color: var(--brand); }
+.pill.wrapp { display: flex; flex-wrap: wrap; justify-content: center; border-radius: 20px; max-width: 100%; }
+.mt-drums { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.mt-actions { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.mt-actions .mt-play { width: 72px; height: 72px; box-shadow: 0 6px 18px rgba(139, 124, 255, .25); }
+.mt-stage .beats { margin: 2px 0; }
+.mt-tapmsg { min-height: 18px; font: 700 13px var(--font-display); color: var(--brand); text-align: center; }
+.mt-help { display: grid; gap: 6px; max-width: 360px; font-size: 12.5px; line-height: 1.4; color: var(--muted); text-align: center; }
+.mt-help p { margin: 0; }
+.mt-help b { color: var(--fg); }
+#mtWeightG { cursor: grab; }
+#mtWeightG:active { cursor: grabbing; }
 .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
 .sec-head h3 { margin: 0; }
 .progs { display: grid; gap: 8px; }
@@ -298,6 +349,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
 
   <nav class="tabs" role="tablist" aria-label="Seções">
     <button role="tab" id="tab-circle" aria-selected="true">Círculo</button>
+    <button role="tab" id="tab-metro" aria-selected="false">Metrônomo</button>
     <button role="tab" id="tab-tuner" aria-selected="false">Afinador</button>
   </nav>
 
@@ -366,12 +418,60 @@ header { position: relative; justify-content: center; min-height: 46px; }
     </div>
     <div class="tempo" id="tempoRow" hidden>
       <label for="bpm" class="inst-l">Andamento</label>
-      <input type="range" id="bpm" min="60" max="130" step="2" value="90">
+      <input type="range" id="bpm" min="40" max="200" step="1" value="90">
       <output id="bpmOut" for="bpm">90 bpm</output>
     </div>
-    <div class="bats" id="batRow" hidden></div>
+    <div class="opts" role="group" aria-label="Opções da progressão">
+      <button class="opt" id="opLoop" aria-pressed="false">Repetir</button>
+      <button class="opt" id="opCount" aria-pressed="false">Contagem</button>
+      <button class="opt" id="opClick" aria-pressed="false">Metrônomo</button>
+    </div>
+    <div class="dd" id="batRow"></div>
+    <div class="beatbox" id="beatRow" hidden><span class="beat-txt" id="beatTxt"></span><div class="beats" id="beatDots"></div></div>
     <div class="progs" id="progs"></div>
   </section>
+
+  </div>
+
+  <div id="vMetro" class="view" hidden>
+    <div class="mt-stage">
+      <svg id="mtSvg" viewBox="0 0 200 310" role="img" aria-label="Metrônomo de pêndulo"><defs><linearGradient id="pyApp" x1="0" x2="1"><stop offset="0" stop-color="#4d4797"/><stop offset=".5" stop-color="#262a5c"/><stop offset="1" stop-color="#4d4797"/></linearGradient></defs><ellipse cx="100" cy="296" rx="78" ry="7" fill="rgba(0,0,0,.35)"/><polygon points="28,290 172,290 122,38 78,38" fill="url(#pyApp)" stroke="#14153a" stroke-width="2.5" stroke-linejoin="round"/><polygon points="52,270 148,270 114,60 86,60" fill="#30346f" opacity=".95"/><line x1="80" y1="70.0" x2="92" y2="70.0" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="73.0" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">40</text><line x1="80" y1="91.4" x2="92" y2="91.4" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="94.4" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">60</text><line x1="80" y1="112.9" x2="92" y2="112.9" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="115.9" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">80</text><line x1="80" y1="134.3" x2="92" y2="134.3" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="137.3" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">100</text><line x1="80" y1="155.7" x2="92" y2="155.7" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="158.7" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">120</text><line x1="80" y1="181.4" x2="92" y2="181.4" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="184.4" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">144</text><line x1="80" y1="215.7" x2="92" y2="215.7" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="218.7" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">176</text><line x1="80" y1="250.0" x2="92" y2="250.0" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="253.0" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">208</text><rect x="97" y="58" width="6" height="200" rx="3" fill="#0e0f1f" opacity=".85"/><rect x="70" y="274" width="60" height="10" rx="3" fill="#14153a" opacity=".55"/><g id="mtRod"><line x1="100" y1="268" x2="100" y2="14" stroke="#e8e9ff" stroke-width="3.4" stroke-linecap="round"/><g id="mtWeightG" transform="translate(0 123.6)"><rect x="60" y="-26" width="80" height="52" fill="transparent"/><rect id="mtWeight" x="87" y="-11" width="26" height="22" rx="5" fill="#ff6b9d" stroke="#14153a" stroke-width="1.5"/></g><circle cx="100" cy="268" r="9" fill="#14153a"/><circle cx="100" cy="268" r="3.5" fill="#e8e9ff"/></g></svg>
+      <div class="mt-bpm"><button id="mtMinus" aria-label="Mais devagar">−</button><output id="mtBpm" for="mtRange">90</output><small>bpm</small><button id="mtPlus" aria-label="Mais rápido">+</button></div>
+      <div class="mt-name" id="mtName">Andante · 4/4</div>
+      <input type="range" id="mtRange" min="40" max="200" step="1" value="90" aria-label="Andamento do metrônomo">
+      <div class="pill" role="group" aria-label="Compasso">
+        <button data-mt="2" aria-pressed="false">2</button>
+        <button data-mt="3" aria-pressed="false">3</button>
+        <button data-mt="4" aria-pressed="true">4</button>
+        <button data-mt="6" aria-pressed="false">6/8</button>
+      </div>
+      <div class="beats" id="mtBeats"></div>
+      <div class="mt-drums">
+        <button class="opt" id="mtDrums" aria-pressed="false">Bateria</button>
+        <div class="pill wrapp" role="group" aria-label="Estilo da bateria">
+          <button data-ds="rock" aria-pressed="true">Rock</button>
+          <button data-ds="pop" aria-pressed="false">Pop</button>
+          <button data-ds="blues" aria-pressed="false">Blues</button>
+          <button data-ds="funk" aria-pressed="false">Funk</button>
+          <button data-ds="disco" aria-pressed="false">Disco</button>
+          <button data-ds="balada" aria-pressed="false">Balada</button>
+          <button data-ds="reggae" aria-pressed="false">Reggae</button>
+          <button data-ds="forro" aria-pressed="false">Forró</button>
+          <button data-ds="sertanejo" aria-pressed="false">Sertanejo</button>
+          <button data-ds="samba" aria-pressed="false">Samba</button>
+          <button data-ds="bossa" aria-pressed="false">Bossa</button>
+        </div>
+      </div>
+      <div class="mt-actions">
+        <button class="mt-tap" id="mtTap">Marcar o tempo</button>
+        <button class="mt-play" id="mtPlay" aria-pressed="false" aria-label="Ligar o metrônomo" title="Ligar o metrônomo"></button>
+      </div>
+      <div class="mt-tapmsg" id="mtTapMsg" aria-live="polite"></div>
+      <div class="mt-help">
+        <p><b>Arraste o peso rosa</b> do pêndulo para cima ou para baixo para mudar o andamento.</p>
+        <p><b>Marcar o tempo:</b> ouça uma música e toque no botão no ritmo, uma vez por tempo (umas 4 ou 5 vezes). O app descobre o andamento dela.</p>
+      </div>
+    </div>
   </div>
 
   <div id="vTuner" class="view" hidden>
@@ -429,7 +529,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     }
   };
 
-  var st = { p: 0, mode: "M", nt: "cifra", style: "pop", inst: "teclado", rhythm: "livre", bpm: 90, batida: "basica" };
+  var st = { p: 0, mode: "M", nt: "cifra", style: "pop", inst: "teclado", rhythm: "livre", bpm: 90, batida: "basica", loop: false, count: false, click: false };
   try { var savedI = localStorage.getItem("cq-inst"); if (["teclado", "violao", "baixo", "orgao"].indexOf(savedI) >= 0) st.inst = savedI; } catch (e) {}
   try { var saved = localStorage.getItem("cq-nt"); if (saved === "sol" || saved === "cifra") st.nt = saved; } catch (e) {}
   var rotDeg = 0, playing = -1, scaleIdx = -1, scalePlay = false, busy = -1, timers = [];
@@ -536,7 +636,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   });
 
   /* ---------- áudio ---------- */
-  var ac = null, master = null, conv = null, bus = null, tune = 1, forceDry = false, syn = null, synOut = null, synWet = null;
+  var ac = null, master = null, conv = null, bus = null, tune = 1, forceDry = false, syn = null, synOut = null, synWet = null, clickBus = null, metroBus = null;
   function audio() {
     if (!ac) {
       var C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
@@ -560,7 +660,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   /* sons dos instrumentos: biblioteca webaudio-tinysynth (instrumentos General MIDI).
      Se ela não carregar, o app usa o som sintetizado à mão, que continua no código como reserva. */
   var SYN = {
-    teclado: { ch: 0, prog: 4, k: 620 },   /* Electric Piano 1 */
+    teclado: { ch: 0, prog: 0, k: 640 },   /* Acoustic Grand Piano */
     violao: { ch: 1, prog: 24, k: 475 },   /* Acoustic Guitar (nylon) */
     baixo: { ch: 2, prog: 33, k: 420 },    /* Electric Bass (finger) */
     orgao: { ch: 3, prog: 16, k: 1400 }    /* Drawbar Organ */
@@ -612,6 +712,11 @@ header { position: relative; justify-content: center; min-height: 46px; }
     return bus;
   }
   function cutSound() {
+    if (clickBus && ac) {   /* os cliques da progressão também param junto */
+      var cb = clickBus; clickBus = null;
+      cb.gain.cancelScheduledValues(ac.currentTime); cb.gain.setTargetAtTime(0, ac.currentTime, 0.01);
+      setTimeout(function () { try { cb.disconnect(); } catch (e) {} }, 300);
+    }
     if (syn) { for (var c = 0; c < 4; c++) { try { syn.allSoundOff(c); } catch (e) {} } }
     if (!bus || !ac) return;
     var b = bus; bus = null;
@@ -650,27 +755,46 @@ header { position: relative; justify-content: center; min-height: 46px; }
     ns.buffer = buf; bp.type = "bandpass"; bp.frequency.value = Math.min(f * 2, 3000); ng.gain.value = vol * 0.22;
     ns.connect(bp); bp.connect(ng); ng.connect(dest); ns.start(t);
   }
-  /* violão: corda dedilhada (Karplus-Strong), gerada uma vez por nota */
+  /* violão: corda dedilhada (Karplus-Strong), gerada uma vez por nota. A palheta/dedo excita a corda com ruído
+     suavizado e um "pente" que simula o ponto onde a corda é tocada; a afinação é corrigida pela velocidade de reprodução. */
   var ksCache = {};
   function pluckBuf(midi) {
     if (ksCache[midi]) return ksCache[midi];
-    var sr = ac.sampleRate, f = 440 * Math.pow(2, (midi - 69) / 12), N = Math.round(sr / f), len = Math.floor(sr * 5);
-    var buf = ac.createBuffer(1, len, sr), d = buf.getChannelData(0), i;
-    for (i = 0; i < N; i++) d[i] = Math.random() * 2 - 1;
-    for (i = N; i < len; i++) d[i] = 0.5 * (d[i - N] + d[i - N + 1]) * 0.9998;
-    ksCache[midi] = buf; return buf;
+    var sr = ac.sampleRate, f = 440 * Math.pow(2, (midi - 69) / 12), N = Math.round(sr / f), len = Math.floor(sr * 4);
+    var buf = ac.createBuffer(1, len, sr), d = buf.getChannelData(0), i, e = new Float32Array(N), p = 0, mx = 0, P = Math.max(1, Math.round(N * 0.17));
+    for (i = 0; i < N; i++) { p = p * 0.55 + (Math.random() * 2 - 1) * 0.45; e[i] = p; }
+    for (i = N - 1; i >= P; i--) e[i] -= e[i - P] * 0.8;
+    for (i = 0; i < N; i++) mx = Math.max(mx, Math.abs(e[i]));
+    for (i = 0; i < N; i++) d[i] = e[i] / (mx || 1) * 0.8;
+    var dec = f < 150 ? 0.9993 : f < 300 ? 0.9988 : 0.9978;
+    for (i = N; i < len; i++) d[i] = 0.5 * (d[i - N] + d[i - N + 1]) * dec;
+    ksCache[midi] = { buf: buf, rate: sr / N / f }; return ksCache[midi];
   }
   function pluck(midi, t, dur, vol) {
-    if (synNote("violao", midi, t, dur, vol)) return;
-    var f = 440 * Math.pow(2, (midi - 69) / 12), d = Math.min(dur, 3), rel = Math.min(0.3, d * 0.3);
-    var src = ac.createBufferSource(), g = ac.createGain(), lp = ac.createBiquadFilter(), body = ac.createBiquadFilter();
-    src.buffer = pluckBuf(midi); src.playbackRate.value = tune;
-    lp.type = "lowpass"; lp.frequency.setValueAtTime(Math.min(f * 12, 6000), t);
-    lp.frequency.exponentialRampToValueAtTime(Math.max(f * 2, 700), t + d);
-    body.type = "peaking"; body.frequency.value = 140; body.gain.value = 6; body.Q.value = 0.8;
-    g.gain.setValueAtTime(vol * 1.6, t); g.gain.exponentialRampToValueAtTime(vol * 0.9, t + d - rel); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
-    src.connect(lp); lp.connect(body); body.connect(g); g.connect(getBus());
+    var f = 440 * Math.pow(2, (midi - 69) / 12), d = Math.min(dur, 3), rel = Math.min(0.25, d * 0.4), k = pluckBuf(midi);
+    var src = ac.createBufferSource(), g = ac.createGain(), lp = ac.createBiquadFilter(), body = ac.createBiquadFilter(), body2 = ac.createBiquadFilter();
+    src.buffer = k.buf; src.playbackRate.value = tune * k.rate;
+    lp.type = "lowpass"; lp.frequency.setValueAtTime(Math.min(f * 9, 5200), t);
+    lp.frequency.exponentialRampToValueAtTime(Math.max(f * 2.5, 900), t + d);
+    body.type = "peaking"; body.frequency.value = 105; body.gain.value = 5; body.Q.value = 1.1;     /* ar dentro do corpo */
+    body2.type = "peaking"; body2.frequency.value = 230; body2.gain.value = 3; body2.Q.value = 1.4;  /* tampo */
+    g.gain.setValueAtTime(vol * 1.7, t); g.gain.setValueAtTime(vol * 1.7, t + Math.max(0.02, d - rel)); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    src.connect(lp); lp.connect(body); body.connect(body2); body2.connect(g); g.connect(getBus());
     src.start(t); src.stop(t + d + 0.05);
+  }
+  /* as seis cordas do acorde, de grave a agudo (posição de violão: fundamental, quinta, fundamental, terça, quinta, fundamental) */
+  function gtrVoicing(c) {
+    var r = c.midi[0], lo = 40 + (((r - 40) % 12) + 12) % 12, th = (((c.midi[1] - r) % 12) + 12) % 12;
+    return [lo, lo + 7, lo + 12, lo + 12 + th, lo + 19, lo + 24];
+  }
+  /* rasgueado: as cordas soam uma depois da outra (grave→agudo para baixo, agudo→grave para cima), com leve irregularidade humana */
+  function strum(c, up, t, len, vol, nStr) {
+    var v = gtrVoicing(c), gap = up ? 0.007 : 0.011;
+    if (up) v = v.slice(6 - (nStr || 4)).reverse(); else if (nStr && nStr < 6) v = v.slice(0, nStr);
+    v.forEach(function (m, k) {
+      var j = (Math.random() - 0.5) * 0.004, a = vol * (up ? 0.85 : 1) * (0.92 + Math.random() * 0.16) * (up ? 1 : 1 - k * 0.02);
+      pluck(m, t + k * gap + Math.max(0, j), len - k * gap, a);
+    });
   }
   /* baixo elétrico estilo jazz bass: corda de verdade (Karplus-Strong) com excitação suave,
      médio "rosnado" de captador de ponte e um toque de oitava para soar em alto-falante pequeno */
@@ -716,9 +840,9 @@ header { position: relative; justify-content: center; min-height: 46px; }
     var a = audio(); if (!a) return;
     var t0 = a.currentTime + when, n = chord.midi, ins = st.inst;
     if (ins === "baixo") bass(n[0] - 24, t0, gap ? gap : 2.2, 0.24);
-    else if (ins === "violao") [n[0] - 24, n[2] - 24, n[0] - 12, n[1] - 12, n[2] - 12].forEach(function (m, k) { pluck(m, t0 + k * 0.035, (gap ? gap : 2.4) - k * 0.035, 0.2); });
+    else if (ins === "violao") strum(chord, false, t0, gap ? gap : 2.6, 0.2);
     else if (ins === "orgao") { var s = gap ? gap + 0.1 : Math.min(dur, 2.6); organ(n[0] - 12, t0, s, 0.05); n.forEach(function (m) { organ(m, t0, s, 0.05); }); }
-    else n.forEach(function (m, k) { tone(m, t0 + k * 0.018, gap ? 1.8 : dur, 0.13); });
+    else { tone(n[0] - 12, t0, gap ? 2.2 : dur, 0.12); n.forEach(function (m, k) { tone(m, t0 + 0.01 + k * 0.014, gap ? 2 : dur, 0.12); }); }
   }
   function playNote(m, t, dur, vol) {
     var ins = st.inst;
@@ -728,7 +852,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     else tone(m, t, dur, vol);
   }
   function stopAll() {
-    timers.forEach(clearTimeout); timers = []; playing = -1; scaleIdx = -1; scalePlay = false; busy = -1; cutSound();
+    timers.forEach(clearTimeout); timers = []; playing = -1; scaleIdx = -1; scalePlay = false; busy = -1; cutSound(); hideBeats();
   }
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
 
@@ -752,32 +876,49 @@ header { position: relative; justify-content: center; min-height: 46px; }
      p8 = compasso de 4 tempos, p4 = de 2 tempos, p6 = de 6 tempos */
   var BAT = {
     basica: { n: "Básica", fill: true,
-      p8: { ch: "D-D-D-D-", bs: "r---f---" }, p4: { ch: "D-D-", bs: "r-f-" }, p6: { ch: "D--D--", bs: "r--f--" } },
+      p8: { ch: "D-DU-UDU", bs: "r---f---" }, p4: { ch: "D-DU", bs: "r-f-" }, p6: { ch: "D-UD-U", bs: "r--f--" } },
     reggae: { n: "Reggae",
       p8: { ch: "-U-U-U-U", bs: "r--rf---" }, p4: { ch: "-U-U", bs: "r--r" }, p6: { ch: "-U--U-", bs: "r--f--" } },
     forro: { n: "Forró",
       p8: { ch: "-D-D-D-D", bs: "r-f-r-f-" }, p4: { ch: "-D-D", bs: "r-f-" }, p6: { ch: "-D--D-", bs: "r--f--" } },
     sertanejo: { n: "Sertanejo",
-      p8: { ch: "D-DU-UDU", bs: "r---f---" }, p4: { ch: "D-DU", bs: "r-f-" }, p6: { ch: "D-UD-U", bs: "r--f--" } },
+      p8: { ch: "D-DUDUDU", bs: "r---f---" }, p4: { ch: "DUDU", bs: "r-f-" }, p6: { ch: "DUDUDU", bs: "r--f--" } },
     bossa: { n: "Bossa nova",
       p8: { ch: "D--D--D-", bs: "r---f---" }, p4: { ch: "D--D", bs: "r-f-" }, p6: { ch: "D--D-D", bs: "r--f--" } }
   };
-  var BAT_ORDER = ["basica", "reggae", "forro", "sertanejo", "bossa"];
+  /* os mesmos ritmos da bateria do metrônomo. p4 e p6 são recortes do padrão de 4 tempos */
+  function mkBat(n, ch, bs) { return { n: n, p8: { ch: ch, bs: bs }, p4: { ch: ch.slice(0, 4), bs: bs.slice(0, 4) }, p6: { ch: ch.slice(0, 6), bs: bs.slice(0, 6) } }; }
+  BAT.rock = mkBat("Rock", "DDDDDDDD", "r-r-r-r-");
+  BAT.pop = mkBat("Pop", "D--UD-DU", "r---f---");
+  BAT.blues = mkBat("Blues", "D-DUD-DU", "r-rfr-rf");
+  BAT.funk = mkBat("Funk", "D-UUD-UU", "r--r--r-");
+  BAT.disco = mkBat("Disco", "-DUD-DUD", "r-r-r-r-");
+  BAT.balada = mkBat("Balada", "D---D-DU", "r---f---");
+  BAT.samba = mkBat("Samba", "D--DU-DU", "r--f-r--");
+  /* swing: quanto a colcheia de contratempo se atrasa (0,5 = reta; 0,67 = shuffle de blues) */
+  var BAT_SW = { basica: 0.54, rock: 0.55, pop: 0.53, blues: 0.67, funk: 0.58, disco: 0.5, balada: 0.58, reggae: 0.57, forro: 0.54, sertanejo: 0.52, samba: 0.54, bossa: 0.52 };
+  Object.keys(BAT_SW).forEach(function (k) { BAT[k].sw = BAT_SW[k]; });
+  var BAT_BPM = { basica: 90, rock: 120, pop: 110, blues: 90, funk: 100, disco: 120, balada: 70, reggae: 76, forro: 110, sertanejo: 100, samba: 100, bossa: 124 };
+  var BAT_ORDER = ["basica", "rock", "pop", "blues", "funk", "disco", "balada", "reggae", "forro", "sertanejo", "samba", "bossa"];
   /* cada instrumento toca a mesma batida do seu jeito */
   function pBass(c, kind, t, slot, vol) {
     var m = kind === "f" ? c.midi[2] : c.midi[0], ins = st.inst;
     if (ins === "baixo") bass(m - 24, t, slot * 1.9, 0.24 * vol);
-    else if (ins === "violao") pluck(m - 24, t, slot * 2.2, 0.2 * vol);
+    else if (ins === "violao") pluck(gtrVoicing({ midi: [m, m + 4, m + 7] })[0], t, slot * 2.4, 0.2 * vol);
     else if (ins === "orgao") organ(m - 12, t, slot * 1.8, 0.05 * vol);
     else tone(m - 12, t, Math.min(slot * 3, 1.6), 0.15 * vol);
   }
   function pChord(c, kind, t, slot, accent) {
     var n = c.midi, ins = st.inst, soft = kind === "U";
     if (ins === "violao") {
-      if (soft) [n[2] - 12, n[1] - 12, n[0] - 12].forEach(function (m, k) { pluck(m, t + k * 0.008, slot * 0.9, 0.13); });
-      else [n[0] - 12, n[1] - 12, n[2] - 12, n[0]].forEach(function (m, k) { pluck(m, t + k * 0.012, slot * 1.7, accent ? 0.2 : 0.16); });
+      if (soft) strum(c, true, t, slot * 1.1, 0.14, 4);
+      else strum(c, false, t, slot * 2.2, accent ? 0.21 : 0.17, 6);
     } else if (ins === "orgao") n.forEach(function (m) { organ(m, t, soft ? slot * 0.7 : slot * 1.7, soft ? 0.04 : 0.045); });
-    else if (ins === "teclado") n.forEach(function (m, k) { tone(m, t + k * 0.012, soft ? slot * 1.3 : Math.min(slot * 2.6, 1.8), soft ? 0.09 : 0.11); });
+    else if (ins === "teclado") {
+      var vv = soft ? 0.09 : accent ? 0.13 : 0.11;
+      if (!soft) tone(n[0] - 12, t, Math.min(slot * 3, 2.2), vv * 0.9);   /* mão esquerda: fundamental grave */
+      n.forEach(function (m, k) { tone(m, t + 0.006 + k * 0.01 + Math.random() * 0.004, soft ? slot * 1.3 : Math.min(slot * 2.6, 2), vv * (0.92 + Math.random() * 0.16)); });
+    }
   }
   /* toca uma colcheia (slot) do padrão no instante t */
   function slotHit(c, B, P, k, t, slot) {
@@ -785,7 +926,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     if (bs !== "-") pBass(c, bs, t, slot, 1);
     if (ch !== "-") {
       pChord(c, ch, t, slot, k === 0);
-      if (st.inst === "baixo" && B.fill && bs === "-") pBass(c, "r", t, slot, 0.7);
+      if (st.inst === "baixo" && B.fill && bs === "-" && ch === "D") pBass(c, "r", t, slot, 0.7);
     }
   }
   /* ritmos: cada acorde dura um compasso. unit = duração de um pulso em tempos
@@ -795,34 +936,227 @@ header { position: relative; justify-content: center; min-height: 46px; }
     r4: { n: 4, unit: 1 },
     r6: { n: 6, unit: 0.5 }
   };
-  function playProg(i) {
-    var info = keyInfo(), seq = PROGS[st.style][st.mode][i], R = RHYTHMS[st.rhythm]; stopAll(); busy = i;
+  /* ---------- cliques, contagem e metrônomo ---------- */
+  function getClickBus() { if (!clickBus) { clickBus = ac.createGain(); clickBus.connect(master); } return clickBus; }
+  function getMetroBus() { if (!metroBus) { metroBus = ac.createGain(); metroBus.connect(master); } return metroBus; }
+  /* clique curto de metrônomo; lv: 3 = primeiro tempo (agudo e forte), 2 = tempo médio, 1 = tempo fraco */
+  function clickSound(dest, t, lv) {
+    var o = ac.createOscillator(), g = ac.createGain(), f = lv >= 3 ? 1800 : lv === 2 ? 1300 : 1000, v = lv >= 3 ? 0.3 : lv === 2 ? 0.22 : 0.15;
+    o.type = "triangle"; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    o.connect(g); g.connect(dest); o.start(t); o.stop(t + 0.07);
+  }
+  /* qual clique cai na colcheia k do compasso (0 = nenhum) */
+  function beatLevel(R, k) {
+    if (R.unit === 1) { if (k % 2) return 0; return k === 0 ? 3 : (R.n === 4 && k === 4 ? 2 : 1); }
+    return k === 0 ? 3 : (k === 3 ? 2 : 1);
+  }
+  function beatBuild(n) {
+    var row = document.getElementById("beatRow");
+    document.getElementById("beatDots").innerHTML = new Array(n + 1).join("<i></i>");
+    document.getElementById("beatTxt").textContent = "";
+    row.hidden = false;
+  }
+  function hideBeats() { var r = document.getElementById("beatRow"); if (r) r.hidden = true; }
+  function beatLight(R, k, at, counting) {
+    var idx = R.unit === 1 ? k / 2 : k;
+    later(function () {
+      var d = document.getElementById("beatDots").children, q;
+      for (q = 0; q < d.length; q++) d[q].className = q === idx ? (counting ? "cnt" : "on") : "";
+      document.getElementById("beatTxt").textContent = counting ? "Contagem" : "Tocando";
+    }, Math.max(0, (at - ac.currentTime) * 1000));
+  }
+
+  /* metrônomo avulso: tem o próprio relógio e não para quando se toca um acorde */
+  var DS_BPM = { rock: 120, pop: 110, blues: 90, funk: 100, disco: 120, balada: 70, reggae: 76, forro: 110, sertanejo: 100, samba: 100, bossa: 130 };
+  var DS_SW = { rock: 0.55, pop: 0.53, blues: 0.67, funk: 0.58, disco: 0.5, balada: 0.58, reggae: 0.57, forro: 0.54, sertanejo: 0.52, samba: 0.55, bossa: 0.52 };
+  var mt = { drums: false, ds: "rock", on: false, n: 4, k: 0, next: 0, timer: 0, q: [], side: -1, sideNext: -1, sStart: 0, sEnd: 1, raf: 0 }, tapT = [], tapMsgT = 0;
+  /* bateria do metrônomo: sons sintetizados (bumbo, caixa, chimbal), em colcheias, que seguem o andamento e o compasso.
+     Pode ser ligada e desligada com o metrônomo tocando. */
+  var drumBus = null, noiseBuf = null;
+  function getDrumBus() { if (!drumBus) { drumBus = ac.createGain(); drumBus.gain.value = 1; drumBus.connect(master); } return drumBus; }
+  function drumNoise() {
+    if (!noiseBuf) { noiseBuf = ac.createBuffer(1, ac.sampleRate, ac.sampleRate); var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+    return noiseBuf;
+  }
+  /* amostras de bateria real (domínio público); até carregarem, ou se falharem, vale o som sintetizado */
+  var DS = {}, dsLoading = false;
+  var DS_FILES = { kick: "drum_bass_hard", kickS: "drum_bass_soft", snare: "drum_snare_hard", snareS: "drum_snare_soft", hat: "drum_cymbal_closed",
+    hatP: "drum_cymbal_pedal", hatO: "drum_cymbal_open", ride: "drum_cymbal_soft", tomH: "drum_tom_hi_soft", tomM: "drum_tom_mid_soft", tomL: "drum_tom_lo_soft" };
+  function loadDrums() {
+    if (dsLoading || !ac) return; dsLoading = true;
+    Object.keys(DS_FILES).forEach(function (k) {
+      fetch("drums/" + DS_FILES[k] + ".flac").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
+        .then(function (b) { return new Promise(function (ok, no) { ac.decodeAudioData(b, ok, no); }); })
+        .then(function (buf) { DS[k] = buf; }).catch(function () {});
+    });
+  }
+  function dSample(name, t, vol, lp, rate) {
+    var b = DS[name]; if (!b) return false;
+    var src = ac.createBufferSource(), g = ac.createGain(), dest = getDrumBus();
+    src.buffer = b; src.playbackRate.value = (rate || 1) * (0.985 + Math.random() * 0.03);
+    g.gain.value = vol * (0.9 + Math.random() * 0.2);
+    src.connect(g);
+    if (lp) { var f = ac.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = lp; g.connect(f); f.connect(dest); } else g.connect(dest);
+    src.start(t); return true;
+  }
+  function dKick(t, v) {
+    if (dSample(v < 0.8 ? "kickS" : "kick", t, 1.1 * v)) return;
+    var o = ac.createOscillator(), g = ac.createGain();
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(48, t + 0.12);
+    g.gain.setValueAtTime(0.9 * v, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+    o.connect(g); g.connect(getDrumBus()); o.start(t); o.stop(t + 0.35);
+  }
+  function dNoise(t, dur, type, freq, vol) {
+    var n = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+    n.buffer = drumNoise(); f.type = type; f.frequency.value = freq; f.Q.value = type === "bandpass" ? 0.9 : 0.5;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    n.connect(f); f.connect(g); g.connect(getDrumBus()); n.start(t, Math.random() * 0.5); n.stop(t + dur + 0.02);
+  }
+  function dSnare(t, v, rim) {
+    if (rim ? dSample("snareS", t, 0.4 * v, 3500, 1.25) : dSample("snare", t, 0.95 * v)) return;
+    if (rim) { dNoise(t, 0.04, "bandpass", 2600, 0.35 * v); var r = ac.createOscillator(), rg = ac.createGain(); r.type = "square"; r.frequency.value = 520; rg.gain.setValueAtTime(0.12 * v, t); rg.gain.exponentialRampToValueAtTime(0.001, t + 0.04); r.connect(rg); rg.connect(getDrumBus()); r.start(t); r.stop(t + 0.05); return; }
+    dNoise(t, 0.16, "bandpass", 1900, 0.55 * v);
+    var o = ac.createOscillator(), g = ac.createGain(); o.type = "triangle"; o.frequency.setValueAtTime(200, t); o.frequency.exponentialRampToValueAtTime(140, t + 0.08);
+    g.gain.setValueAtTime(0.35 * v, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.12); o.connect(g); g.connect(getDrumBus()); o.start(t); o.stop(t + 0.14);
+  }
+  function dHatO(t, v) { if (dSample("hatO", t, 0.55 * v, 9000)) return; dNoise(t, 0.2, "highpass", 7000, 0.22 * v); }
+  function dHat(t, v) { if (v < 0.8 ? dSample("hatP", t, 0.7 * v + 0.2) : dSample("hat", t, 0.8 * v)) return; dNoise(t, 0.05, "highpass", 7500, 0.28 * v); }
+  /* padrões em colcheias (x = toca). 4/4 tem 8 casas; 2/4 tem 4; 3/4 e 6/8 têm 6 */
+  /* k = bumbo, s = caixa (x normal, r aro, g nota fantasma), h = chimbal (x fechado, o aberto, p leve).
+     r = casas por tempo: 2 = colcheias, 4 = semicolcheias. Compassos sem padrão próprio usam o do Rock. */
+  var DR = {
+    rock:   { 4: { k: "x---x---", s: "--x---x-", h: "xxxxxxxx" }, 2: { k: "x---", s: "--x-", h: "xxxx" }, 3: { k: "x-----", s: "--x-x-", h: "xxxxxx" }, 6: { k: "x-----", s: "---x--", h: "xxxxxx" } },
+    pop:    { 4: { k: "x-x-x-x-", s: "--x---x-", h: "-x-x-x-x" }, 2: { k: "x-x-", s: "--x-", h: "-x-x" }, 3: { k: "x-x---", s: "--x-x-", h: "-x-x-x" }, 6: { k: "x-----", s: "---x--", h: "-x-x-x" } },
+    bossa:  { 4: { k: "x--xx---", s: "--r--r--", h: "xxxxxxxx" }, 2: { k: "x--x", s: "--r-", h: "xxxx" }, 3: { k: "x--x--", s: "--r-r-", h: "xxxxxx" }, 6: { k: "x--x--", s: "--r--r", h: "xxxxxx" } },
+    funk:   { 4: { r: 4, k: "x--x--x---x--x--", s: "----x--g-g--x--g", h: "xxxxxxxxxxxxxxxx" }, 2: { r: 4, k: "x--x--x-", s: "----x--g", h: "xxxxxxxx" } },
+    disco:  { 4: { r: 4, k: "x---x---x---x---", s: "----x-------x---", h: "x-o-x-o-x-o-x-o-" }, 2: { r: 4, k: "x---x---", s: "----x---", h: "x-o-x-o-" } },
+    balada: { 4: { k: "x-------", s: "----x---", h: "xxxxxxxx" }, 2: { k: "x---", s: "--x-", h: "xxxx" }, 3: { k: "x-----", s: "---x--", h: "xxxxxx" } },
+    reggae: { 4: { k: "----x---", s: "----r---", h: "x-x-x-x-" }, 2: { k: "--x-", s: "--r-", h: "x-x-" }, 3: { k: "--x---", s: "--r---", h: "x-x-x-" } },
+    forro:  { 4: { k: "x---x---", s: "-r-r-r-r", h: "x-x-x-x-" }, 2: { k: "x---", s: "-r-r", h: "x-x-" }, 3: { k: "x-----", s: "-r-r-r", h: "x-x-x-" } },
+    blues:  { 4: { k: "x---x---", s: "--x-g-x-", h: "xxxxxxxx" }, 2: { k: "x---", s: "--x-", h: "xxxx" }, 3: { k: "x-----", s: "--x-x-", h: "xxxxxx" } },
+    sertanejo: { 4: { k: "x---x-x-", s: "--x---x-", h: "xxxxxxxx" }, 2: { k: "x-x-", s: "--x-", h: "xxxx" }, 3: { k: "x-x---", s: "--x-x-", h: "xxxxxx" } },
+    samba:  { 4: { r: 4, k: "x--x-x--x--x-x--", s: "--r-r---r-r-r---", h: "xxxxxxxxxxxxxxxx" }, 2: { r: 4, k: "x--x-x--", s: "--r-r---", h: "xxxxxxxx" } }
+  };
+  var DS_SOFT = { blues: 0.9, bossa: 0.6, balada: 0.7, samba: 0.75, reggae: 0.85 };
+  function drumPat() { return DR[mt.ds][mt.n] || DR.rock[mt.n]; }
+  function drumSlot(slot, t, p, r) {
+    var i = slot % p.k.length, soft = DR[mt.ds][mt.n] ? (DS_SOFT[mt.ds] || 1) : 1, on = r === 1 || slot % r === 0, hv = (on ? 1 : r === 4 ? 0.45 : 0.6) * soft;
+    if (p.h[i] === "x") dHat(t, hv); else if (p.h[i] === "o") dHatO(t, soft);
+    if (p.k[i] === "x") dKick(t, soft);
+    if (p.s[i] === "x") dSnare(t, soft, false); else if (p.s[i] === "r") dSnare(t, soft, true); else if (p.s[i] === "g") dSnare(t, 0.28, false);
+  }
+  function drumCut() {
+    if (drumBus && ac) { var b = drumBus; drumBus = null; b.gain.cancelScheduledValues(ac.currentTime); b.gain.setTargetAtTime(0, ac.currentTime, 0.015); setTimeout(function () { try { b.disconnect(); } catch (e) {} }, 300); }
+  }
+  function mtDur() { return mt.n === 6 ? 30 / st.bpm : 60 / st.bpm; }   /* 6/8 marca cada colcheia */
+  function tempoName(b) { return b < 60 ? "Largo" : b < 76 ? "Adagio" : b < 108 ? "Andante" : b < 120 ? "Moderato" : b < 168 ? "Allegro" : "Presto"; }
+  /* o peso sobe no pêndulo para andamentos lentos e desce para os rápidos, como no metrônomo de verdade */
+  function mtVisual() {
+    var w = document.getElementById("mtWeightG"), nm = document.getElementById("mtName");
+    if (w) w.setAttribute("transform", "translate(0 " + (70 + (st.bpm - 40) * 180 / 168).toFixed(1) + ")");
+    if (nm) nm.textContent = tempoName(st.bpm) + " · " + (mt.n === 6 ? "6/8" : mt.n + "/4");
+  }
+  function setRod(deg) { var r = document.getElementById("mtRod"); if (r) r.setAttribute("transform", "rotate(" + deg.toFixed(2) + " 100 268)"); }
+  /* o pêndulo segue o relógio do áudio: em cada clique ele está numa ponta, e entre dois cliques desliza para a outra.
+     No 6/8 ele balança a cada três colcheias. */
+  function mtFrame() {
+    if (!mt.on) return;
+    var now = ac.currentTime - (ac.outputLatency || ac.baseLatency || 0);
+    while (mt.q.length && mt.q[0].t <= now) { var e = mt.q.shift(); mt.sStart = e.t; mt.side = e.side; mt.sEnd = e.end; }
+    var p = Math.max(0, Math.min(1, (now - mt.sStart) / Math.max(0.05, mt.sEnd - mt.sStart)));   /* o fim do balanço é a hora do próximo clique, já agendada: mudar o andamento não dá salto */
+    setRod(mt.side * Math.cos(Math.PI * p) * 24);
+    mt.raf = requestAnimationFrame(mtFrame);
+  }
+  function mtBuild() { document.getElementById("mtBeats").innerHTML = new Array(mt.n + 1).join("<i></i>"); }
+  function mtLights(idx) {
+    var d = document.getElementById("mtBeats").children, q;
+    for (q = 0; q < d.length; q++) d[q].className = q === idx ? "on" : "";
+  }
+  function mtPaint() {
+    var b = document.getElementById("mtPlay");
+    b.setAttribute("aria-pressed", mt.on); b.innerHTML = mt.on ? STOP : PLAY;
+    b.setAttribute("aria-label", mt.on ? "Parar o metrônomo" : "Ligar o metrônomo"); b.title = b.getAttribute("aria-label");
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mt]"), function (x) { x.setAttribute("aria-pressed", +x.dataset.mt === mt.n); });
+  }
+  function mtTick() {
+    if (!mt.on) return;
+    while (mt.next < ac.currentTime + 0.15) {
+      var k = mt.k, lv = k === 0 ? 3 : (mt.n === 6 && k === 3 ? 2 : 1), at = mt.next;
+      clickSound(getMetroBus(), at, lv);
+      if (mt.drums) {
+        var dp = drumPat(), dr = mt.n === 6 ? 1 : (dp.r || 2), q;
+        var sw = mt.n === 6 ? 0.5 : DS_SW[mt.ds] || 0.5;   /* swing de cada estilo */
+        for (q = 0; q < dr; q++) drumSlot(k * dr + q, at + ((q >> 1) + (q & 1 ? sw : 0)) * 2 * mtDur() / dr, dp, dr);
+      }
+      if (mt.n === 6 ? k % 3 === 0 : true) { mt.q.push({ t: at, side: mt.sideNext, end: at + (mt.n === 6 ? 3 : 1) * mtDur() }); mt.sideNext = -mt.sideNext; }
+      setTimeout(function (i) { return function () { if (mt.on) mtLights(i); }; }(k), Math.max(0, (at - ac.currentTime) * 1000));
+      mt.next += mtDur(); mt.k = (k + 1) % mt.n;
+    }
+    mt.timer = setTimeout(mtTick, 25);
+  }
+  function mtStart() {
+    var a = audio(); if (!a) return;
+    stopAll();   /* se uma progressão está tocando, ela para */
+    mt.on = true; mt.k = 0; mt.next = a.currentTime + 0.08; mt.q = []; mt.side = -1; mt.sideNext = -1; mt.sStart = mt.next; mt.sEnd = mt.next + (mt.n === 6 ? 3 : 1) * mtDur();
+    mtBuild(); mtPaint(); mtTick(); cancelAnimationFrame(mt.raf); mt.raf = requestAnimationFrame(mtFrame);
+  }
+  function mtStop() {
+    mt.on = false; drumCut(); clearTimeout(mt.timer); cancelAnimationFrame(mt.raf); setRod(0);
+    if (metroBus && ac) { var mb = metroBus; metroBus = null; mb.gain.setTargetAtTime(0, ac.currentTime, 0.01); setTimeout(function () { try { mb.disconnect(); } catch (e) {} }, 300); }
+    mtLights(-1); mtPaint();
+  }
+  /* um só andamento para tudo: a progressão e o metrônomo */
+  function setBpm(v) {
+    v = Math.max(40, Math.min(200, Math.round(v))); st.bpm = v;
+    document.getElementById("bpm").value = v; document.getElementById("mtRange").value = v;
+    document.getElementById("bpmOut").textContent = v + " bpm"; document.getElementById("mtBpm").textContent = v;
+    mtVisual();
+  }
+
+  function playProg(i, again) {
+    var info = keyInfo(), seq = PROGS[st.style][st.mode][i], R = RHYTHMS[st.rhythm];
+    if (!again) stopAll();
+    busy = i;
     if (!R) {
       seq.forEach(function (d, j) {
         sound(info.chords[d], j * 0.9, 2.8, 0.9);
         later(function () { playing = d; paintPanel(); }, j * 900);
       });
-      later(function () { playing = -1; busy = -1; paintPanel(); }, seq.length * 900);
+      later(function () {
+        playing = -1;
+        if (st.loop && busy === i) playProg(i, true);   /* repetir: recomeça a progressão */
+        else { busy = -1; paintPanel(); }
+      }, seq.length * 900);
       paintPanel(); return;
     }
     /* com ritmo, o som é agendado colcheia a colcheia, um pouco à frente do relógio.
-       Cada colcheia lê o andamento atual, então mexer no controle muda a velocidade na hora. */
+       Cada colcheia lê o andamento atual, então mexer no controle muda a velocidade na hora.
+       Com contagem, o primeiro compasso é só de cliques (j = -1). Com repetir, ao fim volta ao primeiro acorde. */
     var a = audio(); if (!a) { paintPanel(); return; }
+    if (st.click) mtStop();   /* o metrônomo da progressão substitui o avulso */
     var B = BAT[st.batida], P = R.n === 2 ? B.p4 : R.n === 4 ? B.p8 : B.p6, slots = P.ch.length;
-    var j = 0, k = 0, next = a.currentTime + 0.06;
+    var j = st.count ? -1 : 0, k = 0, next = a.currentTime + 0.06;
+    beatBuild(R.n); paintPanel();
     function mark(d, at) { later(function () { playing = d; paintPanel(); }, Math.max(0, (at - a.currentTime) * 1000)); }
     function tick() {
       while (j < seq.length && next < a.currentTime + 0.2) {
-        var slot = 30 / st.bpm;
-        if (k === 0) mark(seq[j], next);
-        slotHit(info.chords[seq[j]], B, P, k, next, slot);
-        next += slot; k++;
-        if (k >= slots) { k = 0; j++; }
+        var slot = 30 / st.bpm, lv = beatLevel(R, k);
+        if (j < 0) {
+          if (lv) { clickSound(getClickBus(), next, lv); beatLight(R, k, next, true); }
+        } else {
+          if (k === 0) mark(seq[j], next);
+          slotHit(info.chords[seq[j]], B, P, k, next, slot);
+          if (lv) { if (st.click) clickSound(getClickBus(), next, lv); beatLight(R, k, next, false); }
+        }
+        next += (R.unit === 1 && B.sw) ? slot * 2 * (k % 2 === 0 ? B.sw : 1 - B.sw) : slot; k++;   /* swing: a colcheia de contratempo chega um pouco depois */
+
+        if (k >= slots) { k = 0; j++; if (j >= seq.length && st.loop) j = 0; }
       }
       if (j < seq.length) later(tick, 25);
-      else later(function () { playing = -1; busy = -1; paintPanel(); }, Math.max(0, (next - a.currentTime) * 1000));
+      else later(function () { playing = -1; busy = -1; hideBeats(); paintPanel(); }, Math.max(0, (next - a.currentTime) * 1000));
     }
-    paintPanel(); tick();
+    tick();
   }
 
   /* ---------- painel ---------- */
@@ -844,8 +1178,10 @@ header { position: relative; justify-content: center; min-height: 46px; }
     Array.prototype.forEach.call(document.querySelectorAll("[data-inst]"), function (b) { b.setAttribute("aria-pressed", b.dataset.inst === st.inst); });
     Array.prototype.forEach.call(document.querySelectorAll("[data-r]"), function (b) { b.setAttribute("aria-pressed", b.dataset.r === st.rhythm); });
     document.getElementById("tempoRow").hidden = st.rhythm === "livre";
-    document.getElementById("batRow").hidden = st.rhythm === "livre";
-    Array.prototype.forEach.call(document.querySelectorAll("[data-b]"), function (b) { b.setAttribute("aria-pressed", b.dataset.b === st.batida); });
+    paintBatida();
+    document.getElementById("opLoop").setAttribute("aria-pressed", st.loop);
+    document.getElementById("opCount").setAttribute("aria-pressed", st.count);
+    document.getElementById("opClick").setAttribute("aria-pressed", st.click);
     document.getElementById("ps-pop").setAttribute("aria-pressed", st.style === "pop");
     document.getElementById("ps-igreja").setAttribute("aria-pressed", st.style === "igreja");
     elProgs.innerHTML = PROGS[st.style][st.mode].map(function (seq, i) {
@@ -933,21 +1269,87 @@ header { position: relative; justify-content: center; min-height: 46px; }
     };
   });
   Array.prototype.forEach.call(document.querySelectorAll("[data-r]"), function (b) {
-    b.onclick = function () { st.rhythm = b.dataset.r; stopAll(); paintPanel(); };
+    b.onclick = function () { st.rhythm = b.dataset.r; if (st.rhythm === "livre") { st.count = false; st.click = false; } stopAll(); paintPanel(); };
   });
-  document.getElementById("bpm").oninput = function () {
-    st.bpm = +this.value; document.getElementById("bpmOut").textContent = st.bpm + " bpm";
+  document.getElementById("bpm").oninput = function () { setBpm(+this.value); };
+  document.getElementById("mtRange").oninput = function () { setBpm(+this.value); };
+  document.getElementById("mtMinus").onclick = function () { setBpm(st.bpm - 1); };
+  document.getElementById("mtPlus").onclick = function () { setBpm(st.bpm + 1); };
+  /* repetir, contagem e metrônomo da progressão; contagem e metrônomo precisam de ritmo, então tiram do "Livre" */
+  document.getElementById("opLoop").onclick = function () { st.loop = !st.loop; paintPanel(); };
+  document.getElementById("opCount").onclick = function () { st.count = !st.count; if (st.count && st.rhythm === "livre") st.rhythm = "r4"; paintPanel(); };
+  document.getElementById("opClick").onclick = function () { st.click = !st.click; if (st.click && st.rhythm === "livre") st.rhythm = "r4"; paintPanel(); };
+  /* metrônomo avulso */
+  function drumPaint() {
+    document.getElementById("mtDrums").setAttribute("aria-pressed", mt.drums);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-ds]"), function (x) { x.setAttribute("aria-pressed", x.dataset.ds === mt.ds); });
+  }
+  document.getElementById("mtDrums").onclick = function () { mt.drums = !mt.drums; if (mt.drums) { audio(); loadDrums(); if (!mt.dsSet) { mt.dsSet = true; setBpm(DS_BPM[mt.ds]); } } if (!mt.drums) drumCut(); drumPaint(); };
+  Array.prototype.forEach.call(document.querySelectorAll("[data-ds]"), function (x) {
+    x.onclick = function () { mt.ds = x.dataset.ds; mt.drums = true; setBpm(DS_BPM[mt.ds]); loadDrums(); drumPaint(); };   /* cada estilo tem um andamento inicial; dá para mudar à vontade */   /* escolher um estilo liga a bateria */
+  });
+  document.getElementById("mtPlay").onclick = function () { if (mt.on) mtStop(); else mtStart(); };
+  Array.prototype.forEach.call(document.querySelectorAll("[data-mt]"), function (b) {
+    b.onclick = function () { mt.n = +b.dataset.mt; mt.k = 0; mtBuild(); mtPaint(); mtVisual(); };
+  });
+  document.getElementById("mtTap").onclick = function () {   /* o tempo é a média dos últimos toques */
+    var now = performance.now(), q, sum = 0;
+    if (tapT.length && now - tapT[tapT.length - 1] > 2000) tapT = [];
+    tapT.push(now); if (tapT.length > 5) tapT.shift();
+    var tm = document.getElementById("mtTapMsg");
+    if (tapT.length >= 2) { for (q = 1; q < tapT.length; q++) sum += tapT[q] - tapT[q - 1]; setBpm(60000 / (sum / (tapT.length - 1))); tm.textContent = "Andamento: " + st.bpm + " bpm (" + tapT.length + " toques)"; }
+    else tm.textContent = "Continue tocando no ritmo…";
+    clearTimeout(tapMsgT); tapMsgT = setTimeout(function () { tm.textContent = ""; }, 3000);
   };
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") mtStop(); });
+  mtBuild(); mtPaint(); setBpm(st.bpm);   /* alinha as barras e o peso ao andamento inicial, mesmo que o navegador tenha restaurado valores antigos */
+  /* arrastar o peso rosa muda o andamento: mais alto = mais lento, como no metrônomo de verdade. A posição é lida no
+     sistema de coordenadas da haste, então funciona também com o pêndulo balançando. */
+  (function () {
+    var g = document.getElementById("mtWeightG"), rod = document.getElementById("mtRod"), svg = document.getElementById("mtSvg"), drag = false;
+    function localY(e) {
+      var m = rod.getScreenCTM(); if (!m) return null;
+      var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      return pt.matrixTransform(m.inverse()).y;
+    }
+    g.addEventListener("touchstart", function (e) { e.preventDefault(); }, { passive: false });   /* não rola a página enquanto arrasta */
+    g.addEventListener("pointerdown", function (e) { drag = true; try { g.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault(); });
+    g.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      var y = localY(e); if (y === null) return;
+      setBpm(40 + (y - 70) * 168 / 180);
+    });
+    ["pointerup", "pointercancel"].forEach(function (t) {
+      g.addEventListener(t, function (e) { drag = false; try { g.releasePointerCapture(e.pointerId); } catch (x) {} });
+    });
+  })();
   var SYM = { D: "↓", U: "↑", "-": "·" };
-  document.getElementById("batRow").innerHTML = '<span class="inst-l bat-h">Batida</span>' + BAT_ORDER.map(function (k) {
-    var P = BAT[k].p8;
-    return '<button class="bat" data-b="' + k + '" aria-pressed="false"><b>' + BAT[k].n + '</b>' +
-      '<span>' + P.ch.split("").map(function (s) { return SYM[s]; }).join(" ") + '</span>' +
-      '<span>' + P.bs.split("").map(function (s) { return s === "-" ? "·" : "●"; }).join(" ") + '</span></button>';
-  }).join("") + '<p class="bat-key">↓ ↑ acorde para baixo e para cima · ● nota grave</p>';
-  Array.prototype.forEach.call(document.querySelectorAll("[data-b]"), function (b) {
-    b.onclick = function () { st.batida = b.dataset.b; stopAll(); paintPanel(); };
+  var CHEV = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+  function batArrows(k) { return BAT[k].p8.ch.split("").map(function (x) { return SYM[x]; }).join(" "); }
+  function batBass(k) { return BAT[k].p8.bs.split("").map(function (x) { return x === "-" ? "·" : "●"; }).join(" "); }
+  /* batida: menu suspenso que está sempre à mostra. Mostra a escolhida e abre a lista ao tocar. */
+  var batRow = document.getElementById("batRow");
+  batRow.innerHTML = '<span class="inst-l">Batida</span>' +
+    '<button class="dd-btn" id="batBtn" aria-haspopup="listbox" aria-expanded="false"><span class="dd-name" id="batName"></span><span class="dd-pat" id="batPat"></span>' + CHEV + '</button>' +
+    '<div class="dd-list" id="batList" role="listbox" aria-label="Escolher a batida" hidden>' +
+    BAT_ORDER.map(function (k) { return '<button class="dd-opt" role="option" aria-selected="false" data-b="' + k + '"><b>' + BAT[k].n + ' <em>' + BAT_BPM[k] + ' bpm</em></b><span>' + batArrows(k) + '</span><span>' + batBass(k) + '</span></button>'; }).join("") +
+    '<p class="bat-key">↓ ↑ acorde para baixo e para cima · ● nota grave</p></div>';
+  function batOpen(on) {
+    document.getElementById("batList").hidden = !on;
+    document.getElementById("batBtn").setAttribute("aria-expanded", on);
+  }
+  function paintBatida() {
+    var n = document.getElementById("batName"); if (!n) return;
+    n.textContent = BAT[st.batida].n; document.getElementById("batPat").textContent = batArrows(st.batida);
+    Array.prototype.forEach.call(document.querySelectorAll("#batList [data-b]"), function (o) { o.setAttribute("aria-selected", o.dataset.b === st.batida); });
+  }
+  document.getElementById("batBtn").onclick = function () { batOpen(document.getElementById("batList").hidden); };
+  Array.prototype.forEach.call(document.querySelectorAll("#batList [data-b]"), function (o) {
+    /* escolher uma batida no "Livre" passa para 4 tempos, que é onde ela vale */
+    o.onclick = function () { st.batida = o.dataset.b; setBpm(BAT_BPM[st.batida]); if (st.rhythm === "livre") st.rhythm = "r4"; batOpen(false); stopAll(); paintPanel(); };
   });
+  document.addEventListener("pointerdown", function (e) { if (!batRow.contains(e.target)) batOpen(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") batOpen(false); });
   function setStyle(v) { st.style = v; stopAll(); paintPanel(); }
   document.getElementById("ps-pop").onclick = function () { setStyle("pop"); };
   document.getElementById("ps-igreja").onclick = function () { setStyle("igreja"); };
@@ -1164,15 +1566,19 @@ header { position: relative; justify-content: center; min-height: 46px; }
 
   function showTab(t) {
     document.getElementById("vCircle").hidden = t !== "circle";
+    document.getElementById("vMetro").hidden = t !== "metro";
     document.getElementById("vTuner").hidden = t !== "tuner";
     document.getElementById("tab-circle").setAttribute("aria-selected", t === "circle");
+    document.getElementById("tab-metro").setAttribute("aria-selected", t === "metro");
     document.getElementById("tab-tuner").setAttribute("aria-selected", t === "tuner");
-    document.getElementById("subTxt").textContent = t === "circle" ? "Toque em uma tonalidade e a roda gira." : "Toque uma corda e veja a agulha.";
-    stopAll();
+    document.getElementById("subTxt").textContent = t === "circle" ? "Toque em uma tonalidade e a roda gira." : t === "metro" ? "Toque no play e siga o pêndulo." : "Toque uma corda e veja a agulha.";
+    document.querySelector(".subrow .pill").hidden = t === "metro";   /* a notação das notas não vale para o metrônomo */
+    stopAll(); mtStop();
     if (t === "tuner") { buildGauge(); paintTuner(); paintMeter(null); startMeter(); }
     else { stopMeter(); if (tn.src === "mic") micStop(); }
   }
   document.getElementById("tab-circle").onclick = function () { showTab("circle"); };
+  document.getElementById("tab-metro").onclick = function () { showTab("metro"); };
   document.getElementById("tab-tuner").onclick = function () { showTab("tuner"); };
   paintTuner();
 
