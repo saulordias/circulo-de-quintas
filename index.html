@@ -1663,13 +1663,15 @@ header { position: relative; justify-content: center; min-height: 46px; }
     btn.disabled = true; say("Procurando…");
     navigator.serviceWorker.getRegistration().then(function (reg) {
       if (!reg) { say("O app ainda não está pronto para atualizar. Tente de novo em instantes."); btn.disabled = false; return; }
-      return reg.update().then(function () {
-        if (reg.installing || reg.waiting) {
+      /* compara a versão instalada com a que está publicada (lida do sw.js, sem cache): se for a mesma, já é a última */
+      var pub = fetch("sw.js", { cache: "no-store" }).then(function (r) { return r.text(); }).then(function (t) { var m = /VERSION\s*=\s*"(v\d+)"/.exec(t); return m ? m[1] : null; }).catch(function () { return null; });
+      return Promise.all([pub, currentVersion(), reg.update().catch(function () {})]).then(function (r) {
+        var pv = r[0], cv = r[1];
+        if (pv && cv && pv === cv) { say("Você já está na última versão disponível (" + cv + ")."); btn.disabled = false; }
+        else if (reg.installing || reg.waiting) {
           say("Baixando a nova versão…");
           setTimeout(function () { btn.disabled = false; if (!barShown()) say("A atualização continua em segundo plano. Feche o app e abra de novo."); }, 15000);
-        } else {
-          currentVersion().then(function (v) { say("Você já está na versão mais recente" + (v ? " (" + v + ")" : "") + "."); btn.disabled = false; });
-        }
+        } else { say("Você já está na última versão disponível" + (cv ? " (" + cv + ")" : "") + "."); btn.disabled = false; }
       });
     }).catch(function () { say("Não deu para verificar agora."); btn.disabled = false; });
   };
