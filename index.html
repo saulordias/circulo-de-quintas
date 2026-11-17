@@ -945,11 +945,11 @@ header { position: relative; justify-content: center; min-height: 46px; }
 
   /*DP-START*/
   /* detecta a altura de uma nota (algoritmo YIN): devolve { freq, clarity } ou null se não houver som */
-  function detectPitch(buf, sr) {
+  function detectPitch(buf, sr, gate) {
     var W = 2048, tauMax = Math.min(Math.floor(sr / 28), buf.length - W - 1), tauMin = Math.max(2, Math.floor(sr / 1400)), i, tau;
     if (tauMax <= tauMin) return null;
     var rms = 0; for (i = 0; i < W; i++) rms += buf[i] * buf[i];
-    if (Math.sqrt(rms / W) < 0.008) return null;
+    if (Math.sqrt(rms / W) < (gate === undefined ? 0.008 : gate)) return null;
     var d = new Float32Array(tauMax + 1), cm = new Float32Array(tauMax + 1), run = 0, s, x;
     for (tau = 1; tau <= tauMax; tau++) {
       s = 0; for (i = 0; i < W; i++) { x = buf[i] - buf[i + tau]; s += x * x; }
@@ -1026,11 +1026,53 @@ header { position: relative; justify-content: center; min-height: 46px; }
     if (!ac || an) return;
     an = ac.createAnalyser(); an.fftSize = 4096; anBuf = new Float32Array(4096);
   }
+  /* acompanhamento da nota ouvida: sensibilidade e estabilidade */
+  var trk = { floor: 0.003, last: null, lastOk: 0, pending: null };
+  function trkReset() { trk.floor = 0.003; trk.last = null; trk.lastOk = 0; trk.pending = null; }
+  function centsBetween(a, b) { return 1200 * Math.log2(a / b); }
+  function nearestStringCents(f) {
+    var S = tuning().s, best = 1e9, i, c;
+    for (i = 0; i < S.length; i++) { c = Math.abs(centsBetween(f, tnFreq(S[i]))); if (c < best) best = c; }
+    return best;
+  }
+  /* o microfone do celular costuma "ouvir" o 2º harmônico no ataque da corda grave. Se a nota ouvida está longe
+     de todas as cordas, mas uma oitava acima ou abaixo cai em cima de uma, usa essa. */
+  function fixOctave(p) {
+    var f = p.freq, d0 = nearestStringCents(f);
+    if (d0 <= 120) return p;
+    var cands = [f / 2, f * 2], k, bf = f, bd = d0, d;
+    for (k = 0; k < cands.length; k++) { d = nearestStringCents(cands[k]); if (d < bd - 60 && d <= 80) { bd = d; bf = cands[k]; } }
+    return bf === f ? p : { freq: bf, clarity: p.clarity };
+  }
+  /* uma nota nova só aparece depois de duas leituras seguidas parecidas; a nota que já está na tela acompanha
+     as leituras próximas e suaviza o tremido */
+  function trkAccept(p, now) {
+    if (trk.last && now - trk.lastOk < 1300 && Math.abs(centsBetween(p.freq, trk.last.freq)) < 80) {
+      trk.pending = null;
+      return { freq: Math.exp(0.4 * Math.log(trk.last.freq) + 0.6 * Math.log(p.freq)), clarity: p.clarity };
+    }
+    if (trk.pending && Math.abs(centsBetween(p.freq, trk.pending.freq)) < 40) { trk.pending = null; return p; }
+    trk.pending = p; return null;
+  }
   function meterTick() {
     if (tn.src !== "mic" || !an) return;
     an.getFloatTimeDomainData(anBuf);
-    var rms = 0, i; for (i = 0; i < 1024; i++) rms += anBuf[i] * anBuf[i];
-    paintMeter(detectPitch(anBuf, ac.sampleRate), Math.sqrt(rms / 1024) * 8);
+    var rms = 0, i, now = performance.now();
+    for (i = 0; i < 2048; i++) rms += anBuf[i] * anBuf[i];
+    rms = Math.sqrt(rms / 2048);
+    trk.floor = Math.min(rms, trk.floor * 1.02 + 0.00005);          /* piso de ruído do ambiente: cai rápido, sobe devagar */
+    var lvl = (20 * Math.log10(rms + 1e-9) + 60) / 40;               /* barra do microfone: de -60 dB a -20 dB */
+    var p = rms > Math.max(0.0015, trk.floor * 2.5) ? detectPitch(anBuf, ac.sampleRate, 0) : null;
+    if (p && p.clarity < 0.7) p = null;
+    if (p) p = fixOctave(p);
+    if (p) { /* ignora o que está fora da faixa do instrumento, como o zumbido da rede elétrica (50/60 Hz) */
+      var S = tuning().s, lo = tnFreq(Math.min.apply(null, S)) * 0.8, hi = tnFreq(Math.max.apply(null, S)) * 2.5;
+      if (p.freq < lo || p.freq > hi) p = null;
+    }
+    if (p) p = trkAccept(p, now);
+    if (p) { trk.last = p; trk.lastOk = now; paintMeter(p, lvl); return; }
+    if (trk.last && now - trk.lastOk < 1300) { setLevel(lvl); return; }   /* segura a última leitura enquanto a corda se apaga */
+    trk.last = null; paintMeter(null, lvl);
   }
   function startMeter() { stopMeter(); meterTimer = setInterval(meterTick, 100); }
   function stopMeter() { clearInterval(meterTimer); meterTimer = 0; }
@@ -1038,8 +1080,8 @@ header { position: relative; justify-content: center; min-height: 46px; }
   function micStart() {
     var a = audio(); /* dentro do toque, para o navegador liberar o áudio */
     if (!a || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject(new Error("sem microfone"));
-    return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } }).then(function (stream) {
-      ensureAnalyser();
+    return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true } }).then(function (stream) {
+      ensureAnalyser(); trkReset();
       micStream = stream; micSrc = ac.createMediaStreamSource(stream); micSrc.connect(an); tn.src = "mic";
     });
   }
@@ -1048,6 +1090,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     micStream = null;
     if (micSrc) { try { micSrc.disconnect(); } catch (e) {} micSrc = null; }
     if (tn.src === "mic") tn.src = "off";
+    trkReset();
   }
 
   /* demonstração: a agulha parte de uma corda desafinada e vai se acertando (valores simulados) */
