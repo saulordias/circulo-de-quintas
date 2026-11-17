@@ -1046,7 +1046,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     var ok = Math.abs(cents) < 4, rc = Math.round(cents);
     nd.style.transform = "rotate(" + (Math.max(-50, Math.min(50, cents)) * 0.96) + "deg)";
     g.className = "gauge" + (ok ? " ok" : "");
-    nt.innerHTML = noteName(mi) + '<tspan class="goct" dy="6">' + octOf(mi) + '</tspan>';
+    nt.textContent = noteName(mi);   /* só a letra da nota; a oitava não aparece */
     hz.textContent = r.freq.toFixed(1).replace(".", ",") + " Hz";
     hint.textContent = ok ? "Afinado" : (rc > 0 ? "+" : "") + rc + "¢ · " + (cents < 0 ? "Grave: aperte a corda" : "Agudo: solte a corda");
     markStrings();
