@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Licenças · Círculo de Quintas</title>
+<meta name="theme-color" content="#f4f3ff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0f1f" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" href="../icons/favicon.svg">
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+:root {
+  --bg: #0e0f1f; --surface: #181a30; --line: #2a2e52; --fg: #f2f3ff; --muted: #9a9fc6; --brand: #8b7cff;
+  --font-display: "Sora", system-ui, sans-serif; --font-body: "DM Sans", system-ui, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) { --bg: #f4f3ff; --surface: #ffffff; --line: #d9d6f2; --fg: #15163a; --muted: #5d618a; --brand: #5b4ae0; color-scheme: light; }
+}
+html { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--font-body);
+  padding: 20px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 16px; }
+a { color: var(--brand); }
+.back { font-weight: 700; text-decoration: none; }
+h1 { font: 800 22px/1.15 var(--font-display); margin: 0; letter-spacing: -.01em; }
+p { margin: 0; color: var(--muted); }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: grid; gap: 4px; }
+.item h2 { font: 800 16px var(--font-display); margin: 0; color: var(--fg); }
+.item .lic { font-weight: 700; color: var(--fg); }
+.foot { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../index.html">← Voltar ao app</a>
+  <h1>Licenças</h1>
+  <p>O Círculo de Quintas usa os componentes abertos abaixo. Todos permitem o uso, inclusive comercial, desde que o crédito e o texto da licença sejam mantidos. Aqui estão eles.</p>
+
+  <div class="item">
+    <h2>webaudio-tinysynth 1.1.0</h2>
+    <p>Sons dos instrumentos (teclado, violão, baixo e órgão). Autor: Tatsuya Shinyagaito (g200kg).</p>
+    <p class="lic">Apache License 2.0 · <a href="apache-2.0.txt">ler o texto da licença</a></p>
+  </div>
+
+  <div class="item">
+    <h2>Sora</h2>
+    <p>Fonte dos títulos. © The Sora Project Authors.</p>
+    <p class="lic">SIL Open Font License 1.1 · <a href="sora-OFL.txt">ler o texto da licença</a></p>
+  </div>
+
+  <div class="item">
+    <h2>DM Sans</h2>
+    <p>Fonte do texto. © The DM Sans Project Authors.</p>
+    <p class="lic">SIL Open Font License 1.1 · <a href="dm-sans-OFL.txt">ler o texto da licença</a></p>
+  </div>
+
+  <div class="item">
+    <h2>Old Standard TT</h2>
+    <p>Fonte dos números romanos. © The Old Standard Project Authors.</p>
+    <p class="lic">SIL Open Font License 1.1 · <a href="old-standard-tt-OFL.txt">ler o texto da licença</a></p>
+  </div>
+
+  <p class="foot">O código, o logo e os desenhos do Círculo de Quintas são de Saulo Dias. © 2026 Saulo Dias. Todos os direitos reservados. As partes acima continuam sob as licenças de cada autor.</p>
+</main>
+</body>
+</html>
