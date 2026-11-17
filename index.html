@@ -1014,7 +1014,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
       s += '<line class="tk' + (mj ? " mj" : "") + '" x1="' + p[0].toFixed(1) + '" y1="' + p[1].toFixed(1) + '" x2="' + q[0].toFixed(1) + '" y2="' + q[1].toFixed(1) + '"/>';
     }
     var fl = fpt(176, -57), sh = fpt(176, 57);
-    s += '<path class="zone" d="' + farc(168, 172, -3.84, 3.84) + '"/>' +
+    s += '<path class="zone" d="' + farc(164, 174, -6.72, 6.72) + '"/>' +
       '<text class="gs" x="' + fl[0].toFixed(1) + '" y="' + fl[1].toFixed(1) + '">♭</text><text class="gs" x="' + sh[0].toFixed(1) + '" y="' + sh[1].toFixed(1) + '">♯</text>' +
       '<text class="gnote" id="gNote" x="150" y="62">—</text><text class="ghz" id="gHz" x="150" y="86"></text>' +
       '<g transform="translate(262 12)"><path class="mic" d="M8 3a3 3 0 0 1 6 0v7a3 3 0 0 1-6 0zM4 9.5a7 7 0 0 0 14 0M11 17v3"/>' +
@@ -1035,6 +1035,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     if (!nd) return;
     setLevel(lvl || 0);
     if (!r) {
+      tn.inTune = false;
       g.className = "gauge idle"; nd.style.transform = "rotate(0deg)"; nt.textContent = "—"; hz.textContent = "";
       hint.textContent = tn.src === "mic" ? "Toque uma corda" : "Ligue o microfone e toque uma corda";
       tn.hit = -1; markStrings(); return;
@@ -1043,7 +1044,8 @@ header { position: relative; justify-content: center; min-height: 46px; }
     for (i = 0; i < S.length; i++) { c = 1200 * Math.log2(r.freq / tnFreq(S[i])); if (Math.abs(c) < Math.abs(bc)) { bc = c; best = i; } }
     if (Math.abs(bc) <= 200) { cents = bc; mi = S[best]; tn.hit = best; }
     else { mi = Math.round(69 + 12 * Math.log2(r.freq / tn.a4)); cents = 1200 * Math.log2(r.freq / tnFreq(mi)); tn.hit = -1; }
-    var ok = Math.abs(cents) < 4, rc = Math.round(cents);
+    var ok = Math.abs(cents) < (tn.inTune ? 9 : 7), rc = Math.round(cents);   /* afinado até ±7 cents; só sai do verde depois de ±9 */
+    tn.inTune = ok;
     nd.style.transform = "rotate(" + (Math.max(-50, Math.min(50, cents)) * 0.96) + "deg)";
     g.className = "gauge" + (ok ? " ok" : "");
     nt.textContent = noteName(mi);   /* só a letra da nota; a oitava não aparece */
@@ -1196,6 +1198,23 @@ header { position: relative; justify-content: center; min-height: 46px; }
   };
   paintThemeBtn();
   render();
+})();
+</script>
+<script>
+/* mantém a tela acesa enquanto o app está aberto (o celular não apaga nem bloqueia a tela) */
+(function () {
+  var lock = null;
+  function acquire() {
+    if (!("wakeLock" in navigator) || document.visibilityState !== "visible" || lock) return;
+    navigator.wakeLock.request("screen").then(function (l) {
+      lock = l;
+      l.addEventListener("release", function () { if (lock === l) lock = null; });
+    }).catch(function () { /* sem permissão ou sem suporte: o app segue normal */ });
+  }
+  /* o sistema solta o bloqueio quando o app sai da tela; ao voltar, pede de novo */
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") acquire(); });
+  ["pointerdown", "touchend", "keydown"].forEach(function (t) { window.addEventListener(t, acquire, { passive: true }); });
+  acquire();
 })();
 </script>
 <script>
