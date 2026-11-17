@@ -378,8 +378,9 @@ header { position: relative; justify-content: center; min-height: 46px; }
     <div class="pill wide" role="group" aria-label="Instrumento do afinador">
       <button data-ti="violao" aria-pressed="true">Violão</button>
       <button data-ti="baixo" aria-pressed="false">Baixo</button>
-      <button data-ti="cavaco" aria-pressed="false">Cavaquinho</button>
-      <button data-ti="ukulele" aria-pressed="false">Ukulele</button>
+      <!-- Cavaquinho e Ukulele ocultos por enquanto: para voltar, tire o "hidden" -->
+      <button data-ti="cavaco" aria-pressed="false" hidden>Cavaquinho</button>
+      <button data-ti="ukulele" aria-pressed="false" hidden>Ukulele</button>
     </div>
     <div class="pill wide" id="bassStr" role="group" aria-label="Cordas do baixo" hidden>
       <button data-bs="4" aria-pressed="true">4 cordas</button>

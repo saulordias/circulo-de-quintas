@@ -1,6 +1,6 @@
 /* Service worker do Círculo de Quintas: guarda o app no aparelho para abrir sem internet.
    Ao mudar qualquer arquivo do app, aumente a VERSION para os aparelhos baixarem a versão nova. */
-const VERSION = "v10";
+const VERSION = "v11";
 const CACHE = "cq-" + VERSION;
 const ASSETS = [
   "./", "index.html", "manifest.webmanifest",
