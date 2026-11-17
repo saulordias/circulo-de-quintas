@@ -1639,6 +1639,9 @@ header { position: relative; justify-content: center; min-height: 46px; }
       return v ? v.slice(3) : null;
     }).catch(function () { return null; });
   }
+  var loadedVer = null;   /* versão com a qual esta tela foi aberta */
+  currentVersion().then(function (v) { loadedVer = v; });
+  function showUpdate() { if (bar) bar.hidden = false; say("Nova versão pronta. Toque em Atualizar."); if (btn) btn.disabled = false; }
   function paintVersion() { currentVersion().then(function (v) { if (ver) ver.textContent = v || "—"; }); }
   paintVersion();
   if (supported) {
@@ -1666,12 +1669,19 @@ header { position: relative; justify-content: center; min-height: 46px; }
       /* compara a versão instalada com a que está publicada (lida do sw.js, sem cache): se for a mesma, já é a última */
       var pub = fetch("sw.js", { cache: "no-store" }).then(function (r) { return r.text(); }).then(function (t) { var m = /VERSION\s*=\s*"(v\d+)"/.exec(t); return m ? m[1] : null; }).catch(function () { return null; });
       return Promise.all([pub, currentVersion(), reg.update().catch(function () {})]).then(function (r) {
-        var pv = r[0], cv = r[1];
-        if (pv && cv && pv === cv) { say("Você já está na última versão disponível (" + cv + ")."); btn.disabled = false; }
-        else if (reg.installing || reg.waiting) {
-          say("Baixando a nova versão…");
-          setTimeout(function () { btn.disabled = false; if (!barShown()) say("A atualização continua em segundo plano. Feche o app e abra de novo."); }, 15000);
-        } else { say("Você já está na última versão disponível" + (cv ? " (" + cv + ")" : "") + "."); btn.disabled = false; }
+        var pv = r[0], lv = loadedVer || r[1];
+        if (pv && lv && pv === lv) { say("Você já está na última versão disponível (" + lv + ")."); btn.disabled = false; return; }
+        if (!pv) { say("Não deu para verificar agora."); btn.disabled = false; return; }
+        /* há versão nova publicada: espera ela terminar de instalar e mostra o aviso para atualizar */
+        say("Baixando a nova versão…");
+        var tries = 0;
+        (function wait() {
+          currentVersion().then(function (cv) {
+            if (cv === pv && !reg.installing && !reg.waiting) { paintVersion(); showUpdate(); }
+            else if (++tries > 40) { btn.disabled = false; say("A atualização continua em segundo plano. Feche o app e abra de novo."); }
+            else setTimeout(wait, 500);
+          });
+        })();
       });
     }).catch(function () { say("Não deu para verificar agora."); btn.disabled = false; });
   };
