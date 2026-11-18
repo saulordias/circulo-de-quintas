@@ -416,8 +416,8 @@ header { position: relative; justify-content: center; min-height: 46px; }
     <div class="sec-head">
       <h3>Progressões famosas</h3>
       <div class="pill" role="group" aria-label="Estilo">
-        <button id="ps-pop" aria-pressed="true">Popular</button>
         <button id="ps-igreja" aria-pressed="false">Igreja</button>
+        <button id="ps-pop" aria-pressed="true">Popular</button>
       </div>
     </div>
     <div class="rhythm">
@@ -438,6 +438,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
       <button class="opt" id="opLoop" aria-pressed="false">Repetir</button>
       <button class="opt" id="opCount" aria-pressed="false">Contagem</button>
       <button class="opt" id="opClick" aria-pressed="false">Metrônomo</button>
+      <button class="opt" id="opDrums" aria-pressed="false">Bateria</button>
     </div>
     <div class="dd" id="batRow"></div>
     <div class="beatbox" id="beatRow" hidden><span class="beat-txt" id="beatTxt"></span><div class="beats" id="beatDots"></div></div>
@@ -543,7 +544,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     }
   };
 
-  var st = { p: 0, mode: "M", nt: "cifra", style: "pop", inst: "teclado", rhythm: "livre", bpm: 90, batida: null, loop: false, count: false, click: false };
+  var st = { p: 0, mode: "M", nt: "cifra", style: "pop", inst: "teclado", rhythm: "livre", bpm: 90, batida: null, loop: false, count: false, click: false, drums: false };
   try { var savedI = localStorage.getItem("cq-inst"); if (["teclado", "violao", "baixo", "orgao"].indexOf(savedI) >= 0) st.inst = savedI; } catch (e) {}
   try { var saved = localStorage.getItem("cq-nt"); if (saved === "sol" || saved === "cifra") st.nt = saved; } catch (e) {}
   var rotDeg = 0, playing = -1, scaleIdx = -1, scalePlay = false, busy = -1, timers = [];
@@ -907,7 +908,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     else tone(m, t, dur, vol);
   }
   function stopAll() {
-    timers.forEach(clearTimeout); timers = []; playing = -1; scaleIdx = -1; scalePlay = false; busy = -1; cutSound(); hideBeats();
+    timers.forEach(clearTimeout); timers = []; playing = -1; scaleIdx = -1; scalePlay = false; busy = -1; cutSound(); hideBeats(); if (!mt.on) drumCut();
   }
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
 
@@ -1095,8 +1096,9 @@ header { position: relative; justify-content: center; min-height: 46px; }
   };
   var DS_SOFT = { blues: 0.9, bossa: 0.6, balada: 0.7, samba: 0.75, reggae: 0.85 };
   function drumPat() { return DR[mt.ds][mt.n] || DR.rock[mt.n]; }
-  function drumSlot(slot, t, p, r) {
-    var i = slot % p.k.length, soft = DR[mt.ds][mt.n] ? (DS_SOFT[mt.ds] || 1) : 1, on = r === 1 || slot % r === 0, hv = (on ? 1 : r === 4 ? 0.45 : 0.6) * soft;
+  function drumSlot(slot, t, p, r, ds, n) {
+    ds = ds || mt.ds; n = n || mt.n;
+    var i = slot % p.k.length, soft = DR[ds][n] ? (DS_SOFT[ds] || 1) : 1, on = r === 1 || slot % r === 0, hv = (on ? 1 : r === 4 ? 0.45 : 0.6) * soft;
     if (p.h[i] === "x") dHat(t, hv); else if (p.h[i] === "o") dHatO(t, soft);
     if (p.k[i] === "x") dKick(t, soft);
     if (p.s[i] === "x") dSnare(t, soft, false); else if (p.s[i] === "r") dSnare(t, soft, true); else if (p.s[i] === "g") dSnare(t, 0.28, false);
@@ -1169,6 +1171,13 @@ header { position: relative; justify-content: center; min-height: 46px; }
     mtVisual();
   }
 
+  /* bateria da progressão: o estilo é o da batida escolhida, então o ritmo da bateria bate com o do instrumento */
+  var BAT_DRUM = { basica: "rock" };
+  function progDrums(bat, n, k, at, eighth) {
+    var ds = BAT_DRUM[bat] || bat; if (!DR[ds]) ds = "rock";
+    var p = DR[ds][n] || DR.rock[n], dr = n === 6 ? 1 : (p.r || 2), sub = dr > 2 ? dr / 2 : 1, q;
+    for (q = 0; q < sub; q++) drumSlot(k * sub + q, at + q * eighth / sub, p, dr, ds, n);
+  }
   function playProg(i, again) {
     var info = keyInfo(), seq = PROGS[st.style][st.mode][i], R = RHYTHMS[st.rhythm];
     if (!again) stopAll();
@@ -1202,6 +1211,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
         } else {
           if (k === 0) mark(seq[j], next);
           slotHit(info.chords[seq[j]], B, P, k, next, slot);
+          if (st.drums) progDrums(st.batida || "basica", R.n, k, next, R.unit === 1 && B.sw ? slot * 2 * (k % 2 === 0 ? B.sw : 1 - B.sw) : slot);
           if (lv) { if (st.click) clickSound(getClickBus(), next, lv); beatLight(R, k, next, false); }
         }
         next += (R.unit === 1 && B.sw) ? slot * 2 * (k % 2 === 0 ? B.sw : 1 - B.sw) : slot; k++;   /* swing: a colcheia de contratempo chega um pouco depois */
@@ -1237,6 +1247,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     document.getElementById("opLoop").setAttribute("aria-pressed", st.loop);
     document.getElementById("opCount").setAttribute("aria-pressed", st.count);
     document.getElementById("opClick").setAttribute("aria-pressed", st.click);
+    document.getElementById("opDrums").setAttribute("aria-pressed", st.drums);
     document.getElementById("ps-pop").setAttribute("aria-pressed", st.style === "pop");
     document.getElementById("ps-igreja").setAttribute("aria-pressed", st.style === "igreja");
     elProgs.innerHTML = PROGS[st.style][st.mode].map(function (seq, i) {
@@ -1335,6 +1346,11 @@ header { position: relative; justify-content: center; min-height: 46px; }
   /* repetir, contagem e metrônomo da progressão; contagem e metrônomo precisam de ritmo, então tiram do "Livre" */
   document.getElementById("opLoop").onclick = function () { st.loop = !st.loop; paintPanel(); };
   document.getElementById("opCount").onclick = function () { st.count = !st.count; if (st.count && st.rhythm === "livre") st.rhythm = "r4"; paintPanel(); };
+  document.getElementById("opDrums").onclick = function () {
+    st.drums = !st.drums;
+    if (st.drums) { audio(); loadDrums(); if (st.rhythm === "livre") st.rhythm = "r4"; } else if (!mt.on) drumCut();
+    paintPanel();
+  };
   document.getElementById("opClick").onclick = function () { st.click = !st.click; if (st.click && st.rhythm === "livre") st.rhythm = "r4"; paintPanel(); };
   /* metrônomo avulso */
   function drumPaint() {
