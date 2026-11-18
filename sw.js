@@ -1,28 +1,41 @@
 /* Service worker do Círculo de Quintas: guarda o app no aparelho para abrir sem internet.
    Ao mudar qualquer arquivo do app, aumente a VERSION para os aparelhos baixarem a versão nova. */
-const VERSION = "v24.1.0";
+const VERSION = "v24.1.1";
 const CACHE = "cq-" + VERSION;
-const ASSETS = [
+/* Arquivos essenciais: se um deles falhar, a instalação falha e a versão antiga continua valendo. */
+const CORE = [
   "./", "index.html", "manifest.webmanifest",
   "assets/fonts/fonts.css", "assets/fonts/dm-sans-400.woff2", "assets/fonts/sora-600.woff2", "assets/fonts/old-standard-tt-700.woff2",
   "assets/lib/webaudio-tinysynth.min.js",
-  "drums/LICENSE.txt", "drums/drum_bass_hard.flac", "drums/drum_bass_soft.flac", "drums/drum_heavy_kick.flac", "drums/drum_snare_hard.flac", "drums/drum_snare_soft.flac",
-  "drums/drum_cymbal_closed.flac", "drums/drum_cymbal_pedal.flac", "drums/drum_cymbal_open.flac", "drums/drum_cymbal_soft.flac", "drums/drum_tom_hi_soft.flac", "drums/drum_tom_mid_soft.flac", "drums/drum_tom_lo_soft.flac",
-  "licenses/index.html", "privacidade/index.html", "licenses/apache-2.0.txt", "licenses/sora-OFL.txt", "licenses/dm-sans-OFL.txt", "licenses/old-standard-tt-OFL.txt",
   "icons/favicon.svg", "icons/favicon-32.png", "icons/apple-touch-icon.png",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png"
+];
+/* Arquivos opcionais (bateria, licenças): guardados se possível; se faltar algum, a instalação segue e o arquivo
+   é buscado na internet quando for preciso. */
+const EXTRA = [
+  "drums/LICENSE.txt", "drums/drum_bass_hard.flac", "drums/drum_bass_soft.flac", "drums/drum_heavy_kick.flac", "drums/drum_snare_hard.flac", "drums/drum_snare_soft.flac",
+  "drums/drum_cymbal_closed.flac", "drums/drum_cymbal_pedal.flac", "drums/drum_cymbal_open.flac", "drums/drum_cymbal_soft.flac", "drums/drum_tom_hi_soft.flac", "drums/drum_tom_mid_soft.flac", "drums/drum_tom_lo_soft.flac",
+  "licenses/index.html", "privacidade/index.html", "licenses/apache-2.0.txt", "licenses/sora-OFL.txt", "licenses/dm-sans-OFL.txt", "licenses/old-standard-tt-OFL.txt"
 ];
 
 /* Ao instalar, baixa cada arquivo ignorando o cache do navegador (cache: "reload"). Sem isso, o GitHub Pages
    pode entregar uma cópia antiga que ainda está em cache por alguns minutos, e o app "atualiza" para a versão velha. */
+function fetchInto(c, a, strict) {
+  return fetch(new Request(a, { cache: "reload" })).then((r) => { if (!r.ok) throw new Error("falhou: " + a); return c.put(a, r); })
+    .catch((err) => { if (strict) throw err; });
+}
 self.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(CACHE)
-      .then((c) => Promise.all(ASSETS.map((a) =>
-        fetch(new Request(a, { cache: "reload" })).then((r) => { if (!r.ok) throw new Error("falhou: " + a); return c.put(a, r); })
-      )))
+      .then((c) => Promise.all(CORE.map((a) => fetchInto(c, a, true)).concat(EXTRA.map((a) => fetchInto(c, a, false)))))
       .then(() => self.skipWaiting())
+      .catch((err) => { caches.delete(CACHE); throw err; })   /* instalação incompleta não deixa cache pela metade */
   );
+});
+
+/* a tela pergunta qual versão está rodando */
+self.addEventListener("message", (e) => {
+  if (e.data && e.data.type === "version" && e.ports && e.ports[0]) e.ports[0].postMessage(VERSION);
 });
 
 self.addEventListener("activate", (e) => {

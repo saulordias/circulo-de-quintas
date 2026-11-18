@@ -1267,7 +1267,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     b.onclick = function () {
       st.inst = b.dataset.inst;
       try { localStorage.setItem("cq-inst", st.inst); } catch (e) {}
-      playChord(0);
+      stopAll(); paintPanel();   /* só troca o instrumento, sem tocar */
     };
   });
   Array.prototype.forEach.call(document.querySelectorAll("[data-r]"), function (b) {
@@ -1633,34 +1633,45 @@ header { position: relative; justify-content: center; min-height: 46px; }
 </script>
 <script>
 /* funcionamento sem internet e atualização do app.
-   Como saber se há versão nova: o navegador confere o sw.js (reg.update). Se aparecer um service worker novo
-   (updatefound, installing/waiting) ou se a versão guardada no aparelho mudar, há atualização.
+   Há versão nova quando, depois de reg.update(), existe um service worker novo (installing/waiting) ou o worker ativo mudou.
+   Se a instalação da versão nova falhar, avisa que não deu (e não finge que atualizou).
    Em segundo plano: aparece o aviso "Nova versão disponível". Pelo botão "Buscar atualização": avisa e atualiza. */
 (function () {
   var supported = "serviceWorker" in navigator && /^https?:$/.test(location.protocol);
   var hadController = supported && !!navigator.serviceWorker.controller;
   var msg = document.getElementById("updMsg"), btn = document.getElementById("updBtn"), ver = document.getElementById("appVer"),
       bar = document.getElementById("updBar"), go = document.getElementById("updGo"), barTxt = bar && bar.querySelector("span");
-  var checking = false, reloading = false;
+  var checking = false, reloading = false, pending = false;   /* pending: versão nova já instalada, falta só recarregar */
   function say(t) { if (msg) msg.textContent = t; }
-  function currentVersion() {
+  function cacheVersion() {
     return caches.keys().then(function (k) {
-      function num(n) { return n.slice(4).split(".").map(Number); }   /* "cq-v24.1.1" -> [24, 1, 1] */
+      function num(n) { return n.slice(4).split(".").map(Number); }
       function cmp(a, b) { var x = num(a), y = num(b), i; for (i = 0; i < 3; i++) { if ((y[i] || 0) !== (x[i] || 0)) return (y[i] || 0) - (x[i] || 0); } return 0; }
       var v = k.filter(function (n) { return /^cq-v\d+(\.\d+){0,2}$/.test(n); }).sort(cmp)[0];
       return v ? v.slice(3) : null;
     }).catch(function () { return null; });
   }
-  var loadedVer = null;   /* versão guardada quando esta tela abriu */
-  currentVersion().then(function (v) { loadedVer = v; if (ver) ver.textContent = v || "—"; });
-  function paintVersion() { currentVersion().then(function (v) { if (ver) ver.textContent = v || "—"; }); }
+  /* versão do service worker que está rodando; se ele for antigo e não responder, usa a maior guardada */
+  function runningVersion() {
+    return new Promise(function (ok) {
+      var c = supported && navigator.serviceWorker.controller;
+      if (!c) { ok(null); return; }
+      var ch = new MessageChannel(), got = false;
+      ch.port1.onmessage = function (e) { got = true; ok(e.data); };
+      try { c.postMessage({ type: "version" }, [ch.port2]); } catch (e) { ok(null); return; }
+      setTimeout(function () { if (!got) ok(null); }, 600);
+    }).then(function (v) { return v || cacheVersion(); });
+  }
+  function paintVersion() { runningVersion().then(function (v) { if (ver) ver.textContent = v || "—"; }); }
+  paintVersion();
   function applyNow(txt) {   /* recarrega para usar os arquivos novos, informando */
     if (reloading) return; reloading = true;
     say(txt || "Atualizando…"); if (barTxt) barTxt.textContent = "Atualizando…"; if (go) go.disabled = true;
     setTimeout(function () { location.reload(); }, 900);
   }
-  function offerUpdate() {   /* versão nova pronta em segundo plano: mostra o aviso */
+  function offerUpdate() {   /* versão nova instalada: mostra o aviso (ou, durante a busca pelo botão, já atualiza) */
     if (reloading) return;
+    pending = true;
     if (checking) { applyNow("Nova versão encontrada. Atualizando…"); return; }
     if (barTxt) barTxt.textContent = "Nova versão disponível";
     if (bar) bar.hidden = false; say("Nova versão pronta. Toque em Atualizar."); if (btn) btn.disabled = false;
@@ -1678,35 +1689,36 @@ header { position: relative; justify-content: center; min-height: 46px; }
     navigator.serviceWorker.addEventListener("controllerchange", function () { paintVersion(); if (hadController) offerUpdate(); });
   }
   if (go) go.onclick = function () { applyNow("Atualizando…"); };
+  function done(text) { if (text) say(text); btn.disabled = false; checking = false; }
   if (btn) btn.onclick = function () {
     if (!supported) { say("A busca de atualização funciona no app instalado ou no site publicado."); return; }
     if (!navigator.onLine) { say("Sem internet agora."); return; }
     if (reloading) return;
+    if (pending) { applyNow("Nova versão já baixada. Atualizando…"); return; }
     btn.disabled = true; checking = true; say("Procurando…");
     navigator.serviceWorker.getRegistration().then(function (reg) {
-      if (!reg) { say("O app ainda não está pronto para atualizar. Tente de novo em instantes."); btn.disabled = false; checking = false; return; }
-      var found = false;
-      reg.addEventListener("updatefound", function () { found = true; });
-      return currentVersion().then(function (before) {
-        /* a versão já mudou desde que a tela abriu: ela foi baixada em segundo plano, falta só recarregar */
-        if (loadedVer && before && before !== loadedVer) { checking = false; applyNow("Nova versão já baixada. Atualizando…"); return; }
-        return reg.update().catch(function () {}).then(function () {
-          return new Promise(function (r) { setTimeout(r, 1200); });   /* dá tempo de o navegador avisar que achou algo */
-        }).then(function () { return currentVersion(); }).then(function (after) {
-          var changed = found || reg.installing || reg.waiting || (after && before && after !== before);
-          if (!changed) { say("Você já está na última versão disponível" + (before ? " (" + before + ")" : "") + "."); btn.disabled = false; checking = false; return; }
+      if (!reg) { done("O app ainda não está pronto para atualizar. Tente de novo em instantes."); return; }
+      var before = reg.active, failed = false;
+      return runningVersion().then(function (vNow) {
+        return reg.update().catch(function () { failed = true; }).then(function () {
+          var changed = reg.installing || reg.waiting || (reg.active && reg.active !== before);
+          if (!changed) {
+            if (failed) done("Não deu para verificar agora. Tente de novo em instantes.");
+            else done("Você já está na última versão disponível" + (vNow ? " (" + vNow + ")" : "") + ".");
+            return;
+          }
           say("Nova versão encontrada. Baixando…");
-          var tries = 0;   /* espera instalar (a versão guardada muda e não há mais worker em instalação) */
+          var tries = 0;   /* espera o worker novo assumir; o aviso/atualização vem do controllerchange */
           (function wait() {
-            currentVersion().then(function (cv) {
-              if (cv && before && cv !== before && !reg.installing && !reg.waiting) { paintVersion(); checking = false; applyNow("Nova versão encontrada. Atualizando…"); }
-              else if (++tries > 60) { checking = false; btn.disabled = false; say("A atualização continua em segundo plano. Feche o app e abra de novo."); }
-              else setTimeout(wait, 500);
-            });
+            if (reloading || !checking) return;
+            if (!reg.installing && !reg.waiting && reg.active && reg.active !== before) { paintVersion(); offerUpdate(); return; }
+            if (!reg.installing && !reg.waiting && failed) { done("Não foi possível baixar a atualização agora. Tente de novo mais tarde."); return; }
+            if (++tries > 60) { done("A atualização continua em segundo plano. Feche o app e abra de novo."); return; }
+            setTimeout(wait, 500);
           })();
         });
       });
-    }).catch(function () { checking = false; say("Não deu para verificar agora."); btn.disabled = false; });
+    }).catch(function () { done("Não deu para verificar agora."); });
   };
 })();
 </script>
