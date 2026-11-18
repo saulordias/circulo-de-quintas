@@ -4,8 +4,8 @@ O Círculo de Quintas usa os componentes abaixo, todos de uso livre. Os textos c
 
 | Componente | Uso | Licença | Arquivo |
 |---|---|---|---|
-| **webaudio-tinysynth** 1.1.0, de Tatsuya Shinyagaito (g200kg) | Sons dos instrumentos (teclado, violão, baixo e órgão) | Apache License 2.0 | `assets/lib/webaudio-tinysynth.min.js`, texto em `licenses/apache-2.0.txt` |
-| **Gravações dos instrumentos**: piano Salamander (Alexander Holm) e tonejs-instruments (Nicholas Brosowsky; Karoryfer, Versilian, freesound.org) | Sons de teclado, violão, baixo e órgão | CC BY 3.0 | `samples/*`, créditos em `samples/LICENSE.txt` |
+| **webaudio-tinysynth** 1.1.0, de Tatsuya Shinyagaito (g200kg) | Sons dos instrumentos (violão, baixo e teclado) | Apache License 2.0 | `assets/lib/webaudio-tinysynth.min.js`, texto em `licenses/apache-2.0.txt` |
+| **Gravações dos instrumentos**: piano Salamander (Alexander Holm) e tonejs-instruments (Nicholas Brosowsky; Karoryfer, freesound.org) | Sons de violão, baixo e teclado | CC BY 3.0 | `samples/*`, créditos em `samples/LICENSE.txt` |
 | **Amostras de bateria** do projeto Sonic Pi (origem: freesound.org) | Sons da bateria do metrônomo | Domínio público (CC0 1.0) | `drums/*.flac`, nota em `drums/LICENSE.txt` |
 | **Sora**, de The Sora Project Authors | Fonte dos títulos | SIL Open Font License 1.1 | `assets/fonts/sora-600.woff2`, texto em `licenses/sora-OFL.txt` |
 | **DM Sans**, de The DM Sans Project Authors | Fonte do texto | SIL Open Font License 1.1 | `assets/fonts/dm-sans-400.woff2`, texto em `licenses/dm-sans-OFL.txt` |

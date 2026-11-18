@@ -442,10 +442,9 @@ header { position: relative; justify-content: center; min-height: 46px; }
   <div class="inst">
     <span class="inst-l">Som</span>
     <div class="pill" role="group" aria-label="Instrumento">
-      <button data-inst="teclado" aria-pressed="true">Teclado</button>
       <button data-inst="violao" aria-pressed="false">Violão</button>
       <button data-inst="baixo" aria-pressed="false">Baixo</button>
-      <button data-inst="orgao" aria-pressed="false">Órgão</button>
+      <button data-inst="teclado" aria-pressed="true">Teclado</button>
     </div>
   </div>
 
@@ -605,7 +604,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   };
 
   var st = { p: 0, mode: "M", nt: "cifra", style: "pop", inst: "teclado", rhythm: "livre", bpm: 90, batida: null, loop: false, count: false, click: false, drums: false, sel: 0, voi: {} };
-  try { var savedI = localStorage.getItem("cq-inst"); if (["teclado", "violao", "baixo", "orgao"].indexOf(savedI) >= 0) st.inst = savedI; } catch (e) {}
+  try { var savedI = localStorage.getItem("cq-inst"); if (["teclado", "violao", "baixo"].indexOf(savedI) >= 0) st.inst = savedI; } catch (e) {}
   try { var saved = localStorage.getItem("cq-nt"); if (saved === "sol" || saved === "cifra") st.nt = saved; } catch (e) {}
   var rotDeg = 0, playing = -1, scaleIdx = -1, scalePlay = false, busy = -1, timers = [];
 
@@ -737,8 +736,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   var SYN = {
     teclado: { ch: 0, prog: 0, k: 640 },   /* Acoustic Grand Piano */
     violao: { ch: 1, prog: 24, k: 475 },   /* Acoustic Guitar (nylon) */
-    baixo: { ch: 2, prog: 33, k: 420 },    /* Electric Bass (finger) */
-    orgao: { ch: 3, prog: 16, k: 1400 }    /* Drawbar Organ */
+    baixo: { ch: 2, prog: 33, k: 420 }     /* Electric Bass (finger) */
   };
   function initSynth() {
     if (syn || typeof WebAudioTinySynth === "undefined") return;
@@ -805,8 +803,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   var SAMP = {
     teclado: { dir: "piano", n: "C2 Ds2 Fs2 A2 C3 Ds3 Fs3 A3 C4 Ds4 Fs4 A4 C5 Ds5 Fs5 A5 C6", g: 4.5, rel: 0.45 },
     violao: { dir: "violao", n: "B1 D2 E2 Fs2 Gs2 A2 B2 D3 Cs3 Fs3 A3 B3 E3 G3 Cs4 Ds4 Fs4 Gs4 A4 B4 E4 Cs5 D5 E5 Fs5 G5 Gs5 A5 As5", g: 1.1, rel: 0.14 },
-    baixo: { dir: "baixo", n: "E1 G1 As1 Cs2 E2 G2 As2 Cs3 E3 G3", g: 2.2, rel: 0.12 },
-    orgao: { dir: "orgao", n: "C2 Ds2 Fs2 A2 C3 Ds3 Fs3 A3 C4 Ds4 Fs4 A4 C5 Ds5", g: 3.5, rel: 0.12 }
+    baixo: { dir: "baixo", n: "E1 G1 As1 Cs2 E2 G2 As2 Cs3 E3 G3", g: 2.2, rel: 0.12 }
   };
   function noteMidi(name) {
     var m = /^([A-G])(s?)(\d)$/.exec(name), pc = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[m[1]];
@@ -938,33 +935,17 @@ header { position: relative; justify-content: center; min-height: 46px; }
     src.connect(lp); lp.connect(mid); mid.connect(g); sub.connect(sg); sg.connect(g); g.connect(getBus());
     src.start(t); sub.start(t); src.stop(t + d + 0.05); sub.stop(t + d + 0.05);
   }
-  /* órgão: harmônicos sustentados, solta ao fim */
-  function organ(midi, t, sus, vol) {
-    if (sampNote("orgao", midi, t, sus + 0.1, vol)) return;
-    if (synNote("orgao", midi, t, sus + 0.1, vol)) return;
-    var f = 440 * Math.pow(2, (midi - 69) / 12), g = ac.createGain();
-    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.03);
-    g.gain.setValueAtTime(vol, t + sus); g.gain.exponentialRampToValueAtTime(0.0001, t + sus + 0.35);
-    [[0.5, 0.5], [1, 1], [2, 0.6], [3, 0.35], [4, 0.2]].forEach(function (p) {
-      var o = ac.createOscillator(), pg = ac.createGain();
-      o.type = "sine"; o.frequency.value = f * p[0]; pg.gain.value = p[1];
-      o.connect(pg); pg.connect(g); o.start(t); o.stop(t + sus + 0.4);
-    });
-    g.connect(getBus());
-  }
   function sound(chord, when, dur, gap) {
     var a = audio(); if (!a) return;
     var t0 = a.currentTime + when, n = chord.midi, ins = st.inst;
     if (ins === "baixo") bass(n[0] - 24, t0, gap ? gap : 2.2, 0.24);
     else if (ins === "violao") strum(chord, false, t0, gap ? gap : 2.6, 0.2);
-    else if (ins === "orgao") { var s = gap ? gap + 0.1 : Math.min(dur, 2.6); organ(n[0] - 12, t0, s, 0.05); n.forEach(function (m) { organ(m, t0, s, 0.05); }); }
     else { tone(n[0] - 12, t0, gap ? 2.2 : dur, 0.12); n.forEach(function (m, k) { tone(m, t0 + 0.01 + k * 0.014, gap ? 2 : dur, 0.12); }); }
   }
   function playNote(m, t, dur, vol) {
     var ins = st.inst;
     if (ins === "baixo") bass(m - 24, t, dur, 0.24);
     else if (ins === "violao") pluck(m - 12, t, dur, 0.2);
-    else if (ins === "orgao") organ(m, t, 0.5, 0.06);
     else tone(m, t, dur, vol);
   }
   function stopAll() {
@@ -1021,7 +1002,6 @@ header { position: relative; justify-content: center; min-height: 46px; }
     var m = kind === "f" ? c.midi[2] : c.midi[0], ins = st.inst;
     if (ins === "baixo") bass(m - 24, t, slot * 1.9, 0.24 * vol);
     else if (ins === "violao") pluck(gtrVoicing({ midi: [m, m + 4, m + 7] })[0], t, slot * 2.4, 0.2 * vol);
-    else if (ins === "orgao") organ(m - 12, t, slot * 1.8, 0.05 * vol);
     else tone(m - 12, t, Math.min(slot * 3, 1.6), 0.15 * vol);
   }
   function pChord(c, kind, t, slot, accent) {
@@ -1029,8 +1009,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     if (ins === "violao") {
       if (soft) strum(c, true, t, slot * 1.1, 0.14, 4);
       else strum(c, false, t, slot * 2.2, accent ? 0.21 : 0.17, 6);
-    } else if (ins === "orgao") n.forEach(function (m) { organ(m, t, soft ? slot * 0.7 : slot * 1.7, soft ? 0.04 : 0.045); });
-    else if (ins === "teclado") {
+    } else if (ins === "teclado") {
       var vv = soft ? 0.09 : accent ? 0.13 : 0.11;
       if (!soft) tone(n[0] - 12, t, Math.min(slot * 3, 2.2), vv * 0.9);   /* mão esquerda: fundamental grave */
       n.forEach(function (m, k) { tone(m, t + 0.006 + k * 0.01 + Math.random() * 0.004, soft ? slot * 1.3 : Math.min(slot * 2.6, 2), vv * (0.92 + Math.random() * 0.16)); });
@@ -1385,12 +1364,11 @@ header { position: relative; justify-content: center; min-height: 46px; }
       var tt = t + k * (ins === "violao" ? 0.011 : ins === "baixo" ? 0.28 : 0.014);
       if (ins === "violao") pluck(m, tt, 2.4, 0.2);
       else if (ins === "baixo") bass(m, tt, 1.2, 0.24);
-      else if (ins === "orgao") organ(m, tt, 2, 0.05);
       else tone(m, tt, 2.2, 0.12);
     });
   }
   var dgSig = "", dgCur = null, dgKey = "", dgPanel = document.getElementById("dgPanel");
-  var INS_NAME = { teclado: "Teclado", violao: "Violão", baixo: "Baixo", orgao: "Órgão" };
+  var INS_NAME = { teclado: "Teclado", violao: "Violão", baixo: "Baixo" };
   function paintDiagram() {
     if (!dgPanel) return;
     var info = keyInfo(), d = playing >= 0 ? playing : st.sel, c = info.chords[d], vs = dgVoicings(c), key = st.inst + "|" + c.root + c.q, vi = Math.min(st.voi[key] || 0, vs.length - 1), v = vs[vi];
@@ -1529,7 +1507,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     var sig = [st.inst, st.nt, pc, ax.cls, t, vi, ax.br, ax.bl].join("|");
     if (!force && sig === axSig) return; axSig = sig; axKey = key;
     var v = vs[vi], nm = axName(pc, t), C = AX_C.filter(function (c) { return c.id === ax.cls; })[0], isB = st.inst === "baixo";
-    document.getElementById("axIns").innerHTML = [["violao", "Violão"], ["teclado", "Teclado"], ["baixo", "Baixo"], ["orgao", "Órgão"]].map(function (x) { return '<button data-ai="' + x[0] + '" aria-pressed="' + (st.inst === x[0]) + '">' + x[1] + '</button>'; }).join("");
+    document.getElementById("axIns").innerHTML = [["violao", "Violão"], ["baixo", "Baixo"], ["teclado", "Teclado"]].map(function (x) { return '<button data-ai="' + x[0] + '" aria-pressed="' + (st.inst === x[0]) + '">' + x[1] + '</button>'; }).join("");
     document.getElementById("axRoots").innerHTML = AX_RN.map(function (n, i) { return '<button class="axroot" data-ar="' + i + '" aria-pressed="' + (i === pc) + '">' + fmt(n) + '<small>' + (AX_ALT[i] ? fmt(AX_ALT[i]) : "") + '</small></button>'; }).join("");
     document.getElementById("axCls").innerHTML = AX_C.map(function (c) { return '<button data-ac="' + c.id + '" aria-pressed="' + (c.id === ax.cls) + '">' + c.n + '</button>'; }).join("");
     document.getElementById("axClsD").textContent = C.d;
