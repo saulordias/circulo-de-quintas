@@ -438,7 +438,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     <div class="mt-stage">
       <svg id="mtSvg" viewBox="0 0 200 310" role="img" aria-label="Metrônomo de pêndulo"><defs><linearGradient id="pyApp" x1="0" x2="1"><stop offset="0" stop-color="#4d4797"/><stop offset=".5" stop-color="#262a5c"/><stop offset="1" stop-color="#4d4797"/></linearGradient></defs><ellipse cx="100" cy="296" rx="78" ry="7" fill="rgba(0,0,0,.35)"/><polygon points="28,290 172,290 122,38 78,38" fill="url(#pyApp)" stroke="#14153a" stroke-width="2.5" stroke-linejoin="round"/><polygon points="52,270 148,270 114,60 86,60" fill="#30346f" opacity=".95"/><line x1="80" y1="70.0" x2="92" y2="70.0" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="73.0" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">40</text><line x1="80" y1="91.4" x2="92" y2="91.4" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="94.4" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">60</text><line x1="80" y1="112.9" x2="92" y2="112.9" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="115.9" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">80</text><line x1="80" y1="134.3" x2="92" y2="134.3" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="137.3" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">100</text><line x1="80" y1="155.7" x2="92" y2="155.7" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="158.7" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">120</text><line x1="80" y1="181.4" x2="92" y2="181.4" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="184.4" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">144</text><line x1="80" y1="215.7" x2="92" y2="215.7" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="218.7" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">176</text><line x1="80" y1="250.0" x2="92" y2="250.0" stroke="#c9ccf0" stroke-width="1.4"/><text x="76" y="253.0" text-anchor="end" font-size="8" fill="#c9ccf0" font-family="Sora,sans-serif" font-weight="700">208</text><rect x="97" y="58" width="6" height="200" rx="3" fill="#0e0f1f" opacity=".85"/><rect x="70" y="274" width="60" height="10" rx="3" fill="#14153a" opacity=".55"/><g id="mtRod"><line x1="100" y1="268" x2="100" y2="14" stroke="#e8e9ff" stroke-width="3.4" stroke-linecap="round"/><g id="mtWeightG" transform="translate(0 123.6)"><rect x="60" y="-26" width="80" height="52" fill="transparent"/><rect id="mtWeight" x="87" y="-11" width="26" height="22" rx="5" fill="#ff6b9d" stroke="#14153a" stroke-width="1.5"/></g><circle cx="100" cy="268" r="9" fill="#14153a"/><circle cx="100" cy="268" r="3.5" fill="#e8e9ff"/></g></svg>
       <div class="mt-bpm"><button id="mtMinus" aria-label="Mais devagar">−</button><output id="mtBpm" for="mtRange">90</output><small>bpm</small><button id="mtPlus" aria-label="Mais rápido">+</button></div>
-      <div class="mt-name" id="mtName">Andante · 4/4</div>
+      <div class="mt-name" id="mtName">Calmo · 4/4</div>
       <input type="range" id="mtRange" min="40" max="200" step="1" value="90" aria-label="Andamento do metrônomo">
       <div class="pill" role="group" aria-label="Compasso">
         <button data-mt="2" aria-pressed="false">2</button>
@@ -1052,7 +1052,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     if (drumBus && ac) { var b = drumBus; drumBus = null; b.gain.cancelScheduledValues(ac.currentTime); b.gain.setTargetAtTime(0, ac.currentTime, 0.015); setTimeout(function () { try { b.disconnect(); } catch (e) {} }, 300); }
   }
   function mtDur() { return mt.n === 6 ? 30 / st.bpm : 60 / st.bpm; }   /* 6/8 marca cada colcheia */
-  function tempoName(b) { return b < 60 ? "Largo" : b < 76 ? "Adagio" : b < 108 ? "Andante" : b < 120 ? "Moderato" : b < 168 ? "Allegro" : "Presto"; }
+  function tempoName(b) { return b < 60 ? "Muito lento" : b < 76 ? "Lento" : b < 96 ? "Calmo" : b < 120 ? "Moderado" : b < 144 ? "Animado" : b < 168 ? "Rápido" : "Muito rápido"; }
   /* o peso sobe no pêndulo para andamentos lentos e desce para os rápidos, como no metrônomo de verdade */
   function mtVisual() {
     var w = document.getElementById("mtWeightG"), nm = document.getElementById("mtName");
@@ -1645,7 +1645,9 @@ header { position: relative; justify-content: center; min-height: 46px; }
   function say(t) { if (msg) msg.textContent = t; }
   function currentVersion() {
     return caches.keys().then(function (k) {
-      var v = k.filter(function (n) { return /^cq-v\d+$/.test(n); }).sort(function (a, b) { return +b.slice(4) - +a.slice(4); })[0];
+      function num(n) { return n.slice(4).split(".").map(Number); }   /* "cq-v24.1.1" -> [24, 1, 1] */
+      function cmp(a, b) { var x = num(a), y = num(b), i; for (i = 0; i < 3; i++) { if ((y[i] || 0) !== (x[i] || 0)) return (y[i] || 0) - (x[i] || 0); } return 0; }
+      var v = k.filter(function (n) { return /^cq-v\d+(\.\d+){0,2}$/.test(n); }).sort(cmp)[0];
       return v ? v.slice(3) : null;
     }).catch(function () { return null; });
   }
