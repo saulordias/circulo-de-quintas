@@ -1,0 +1,5 @@
+Amostras de bateria: projeto Sonic Pi (https://github.com/sonic-pi-net/sonic-pi, pasta etc/samples).
+Segundo o README do projeto, as amostras "drum_*" vêm do freesound.org e foram dedicadas ao domínio público
+(Creative Commons 0 / CC0 1.0). Algumas foram cortadas e ajustadas para o Sonic Pi.
+Origens: bumbo "heavy kick" (freesound.org/people/Zajo/sounds/4832), caixa e pratos (freesound.org/people/menegass).
+Uso livre, inclusive comercial, sem exigência de crédito. O crédito aqui é por cortesia.
