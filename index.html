@@ -126,8 +126,8 @@ h3 { font: 700 13px var(--font-display); letter-spacing: .08em; text-transform: 
 .chord.play-scale { border-top-color: var(--brand); justify-content: center; font-weight: 700; font-size: 13px; color: var(--brand); gap: 4px; }
 .chord.play-scale svg { width: 22px; height: 22px; fill: currentColor; }
 
-.tabs { display: flex; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; box-shadow: var(--shadow); }
-.tabs button { flex: 1; padding: 10px; border-radius: 999px; font: 700 14px var(--font-display); color: var(--muted); }
+.tabs { display: flex; gap: 2px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; box-shadow: var(--shadow); }
+.tabs button { flex: 1 1 auto; min-width: 0; padding: 10px 6px; border-radius: 999px; font: 700 13px var(--font-display); color: var(--muted); white-space: nowrap; }
 .tabs button[aria-selected="true"] { background: var(--brand); color: #fff; }
 .view { display: flex; flex-direction: column; gap: 22px; }
 .pill.wide { display: flex; width: 100%; }
@@ -335,11 +335,20 @@ header { position: relative; justify-content: center; min-height: 46px; }
 .axcard svg { display: block; height: 92px; width: auto; max-width: 100%; } .axcard.p svg { height: auto; width: 100%; }
 .axcard i { position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
 .axcard .tn { font: 600 14px var(--font-display); margin-top: 6px; } .axcard .dg { font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+.axsearch { display: flex; flex-direction: column; gap: 6px; }
+.axsearch input { width: 100%; padding: 11px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--fg); font: 600 14px var(--font-body); box-shadow: var(--shadow); -webkit-appearance: none; appearance: none; }
+.axsearch input::placeholder { color: var(--muted); font-weight: 500; } .axsearch input:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+.axqm { font-size: 12.5px; color: var(--ton-t, var(--muted)); min-height: 0; } .axqm:empty { display: none; }
+.dgp-sl { font: 700 11px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .axleg { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; } .axleg i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); display: inline-block; }
 .dgp-c .pill.wrap { flex-wrap: wrap; border-radius: 18px; } .dgp-c .pill.wrap button { padding: 6px 10px; font-size: 12px; }
 .neck { display: block; width: 100%; height: auto; } .nk-l { stroke: var(--muted); stroke-width: 1.2; } .nk-s { stroke: var(--muted); stroke-width: 1.6; opacity: .9; } .nk-nut { stroke: var(--fg); stroke-width: 4; } .nk-in { fill: var(--muted); opacity: .5; }
 .nk-t { fill: var(--muted); font: 700 9px var(--font-display); text-anchor: middle; } .nk-d { fill: var(--brand); } .nk-r { fill: var(--ton); } .nk-g { fill: #fff; font: 700 10px var(--font-display); text-anchor: middle; } .nk-sn { fill: var(--muted); font: 700 10px var(--font-display); text-anchor: end; }
 .tip { color: var(--muted); font-size: 13px; text-align: center; margin: 0; }
+.vid { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: -10px; }
+.vid a { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--brand); font: 700 13px var(--font-display); text-decoration: none; box-shadow: var(--shadow); }
+.vid a svg { width: 13px; height: 13px; fill: currentColor; }
+.vid p { margin: 0; font-size: 11px; line-height: 1.35; color: var(--muted); }
 .legend { display: grid; gap: 7px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 9px 12px; font-size: 11.5px; color: var(--muted); }
 .lg { display: grid; grid-template-columns: 9px minmax(0, 1fr); gap: 8px; align-items: start; }
 .lg > i { width: 9px; height: 9px; border-radius: 50%; margin-top: 4px; }
@@ -429,6 +438,10 @@ header { position: relative; justify-content: center; min-height: 46px; }
   </div>
 
   <div class="legend" id="legend"></div>
+  <div class="vid">
+    <a href="https://www.youtube.com/watch?v=EDa6PpUVhSU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Entenda o campo harmônico em vídeo</a>
+    <p>Vídeo externo do canal Luiz Criasom, no YouTube. O conteúdo é de responsabilidade do autor.</p>
+  </div>
 
   <div class="dv" aria-hidden="true"><i></i></div>
 
@@ -498,6 +511,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
 
   <div id="vChords" class="view" hidden>
     <div class="axrow"><span class="inst-l">Instrumento</span><div class="pill axins" id="axIns" role="group" aria-label="Instrumento"></div></div>
+    <div class="axsearch"><input type="search" id="axQ" placeholder="Buscar acorde: Am7, F#m, C/E, Sol maior" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Buscar acorde"><p class="axqm" id="axQm" aria-live="polite"></p></div>
     <div><div class="inst-l" style="margin-bottom:8px">Nota</div><div class="axroots" id="axRoots"></div></div>
     <div class="dgp" id="axPanel" style="margin-top:0"></div>
     <div><div class="inst-l" style="margin-bottom:8px">Tipo de acorde</div><div class="axcls" id="axCls"></div></div>
@@ -578,7 +592,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   </div>
 
   <footer class="foot">© 2026 Saulo Dias. Todos os direitos reservados.
-    <small>Sons: webaudio-tinysynth (Apache 2.0). Fontes: Sora, DM Sans e Old Standard TT (SIL OFL). <a href="licenses/index.html">Ver licenças</a> · <a href="privacidade/index.html">Privacidade</a></small>
+    <small>Sons: webaudio-tinysynth (Apache 2.0); piano de Alexander Holm (CC BY 3.0); violão do FreePats e baixo da Karoryfer (CC0); bateria do Sonic Pi (CC0). Fontes: Sora, DM Sans e Old Standard TT (SIL OFL). <a href="licenses/index.html">Ver licenças</a> · <a href="privacidade/index.html">Privacidade</a> · <a href="termos/index.html">Termos</a></small>
     <small class="upd">Versão <span id="appVer">—</span> · <button id="updBtn" class="linkbtn">Buscar atualização</button><span id="updMsg" aria-live="polite"></span></small></footer>
 </div>
 
@@ -802,8 +816,8 @@ header { position: relative; justify-content: center; min-height: 46px; }
      vale o som sintetizado de antes. */
   var SAMP = {
     teclado: { dir: "piano", n: "C2 Ds2 Fs2 A2 C3 Ds3 Fs3 A3 C4 Ds4 Fs4 A4 C5 Ds5 Fs5 A5 C6", g: 4.5, rel: 0.45 },
-    violao: { dir: "violao", n: "B1 D2 E2 Fs2 Gs2 A2 B2 D3 Cs3 Fs3 A3 B3 E3 G3 Cs4 Ds4 Fs4 Gs4 A4 B4 E4 Cs5 D5 E5 Fs5 G5 Gs5 A5 As5", g: 1.1, rel: 0.14 },
-    baixo: { dir: "baixo", n: "E1 G1 As1 Cs2 E2 G2 As2 Cs3 E3 G3", g: 2.2, rel: 0.12 }
+    violao: { dir: "violao", n: "E2 F2 G2 A2 B2 C3 D3 E3 F3 G3 A3 B3 C4 D4 E4 F4 G4 A4 B4 C5 D5 E5 F5 G5 A5 B5", g: 1.1, rel: 0.14 },
+    baixo: { dir: "baixo", n: "F1 Gs1 B1 D2 F2 Gs2 B2 D3 F3 Gs3 B3", g: 2.2, rel: 0.12 }
   };
   function noteMidi(name) {
     var m = /^([A-G])(s?)(\d)$/.exec(name), pc = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[m[1]];
@@ -893,15 +907,13 @@ header { position: relative; justify-content: center; min-height: 46px; }
     src.connect(lp); lp.connect(body); body.connect(body2); body2.connect(g); g.connect(getBus());
     src.start(t); src.stop(t + d + 0.05);
   }
-  /* as seis cordas do acorde, de grave a agudo (posição de violão: fundamental, quinta, fundamental, terça, quinta, fundamental) */
-  function gtrVoicing(c) {
-    var r = c.midi[0], lo = 40 + (((r - 40) % 12) + 12) % 12, th = (((c.midi[1] - r) % 12) + 12) % 12;
-    return [lo, lo + 7, lo + 12, lo + 12 + th, lo + 19, lo + 24];
-  }
-  /* rasgueado: as cordas soam uma depois da outra (grave→agudo para baixo, agudo→grave para cima), com leve irregularidade humana */
-  function strum(c, up, t, len, vol, nStr) {
-    var v = gtrVoicing(c), gap = up ? 0.007 : 0.011;
-    if (up) v = v.slice(6 - (nStr || 4)).reverse(); else if (nStr && nStr < 6) v = v.slice(0, nStr);
+  /* nota mais grave do violão (mi grave até ré sustenido) com a altura da nota dada */
+  function gtrLow(m) { return 40 + (((m - 40) % 12) + 12) % 12; }
+  /* rasgueado: as cordas da forma escolhida soam uma depois da outra (grave→agudo para baixo, agudo→grave para cima), com leve irregularidade humana */
+  function strum(v, up, t, len, vol, nStr) {
+    var gap = up ? 0.007 : 0.011;
+    if (!v || !v.length) return;
+    if (up) v = v.slice(Math.max(0, v.length - (nStr || 4))).reverse(); else if (nStr && nStr < v.length) v = v.slice(0, nStr);
     v.forEach(function (m, k) {
       var j = (Math.random() - 0.5) * 0.004, a = vol * (up ? 0.85 : 1) * (0.92 + Math.random() * 0.16) * (up ? 1 : 1 - k * 0.02);
       pluck(m, t + k * gap + Math.max(0, j), len - k * gap, a);
@@ -939,8 +951,8 @@ header { position: relative; justify-content: center; min-height: 46px; }
     var a = audio(); if (!a) return;
     var t0 = a.currentTime + when, n = chord.midi, ins = st.inst;
     if (ins === "baixo") bass(n[0] - 24, t0, gap ? gap : 2.2, 0.24);
-    else if (ins === "violao") strum(chord, false, t0, gap ? gap : 2.6, 0.2);
-    else { tone(n[0] - 12, t0, gap ? 2.2 : dur, 0.12); n.forEach(function (m, k) { tone(m, t0 + 0.01 + k * 0.014, gap ? 2 : dur, 0.12); }); }
+    else if (ins === "violao") strum(voiceNotes(chord), false, t0, gap ? gap : 2.6, 0.2);
+    else { var rh = voiceNotes(chord) || n; tone(n[0] - 12, t0, gap ? 2.2 : dur, 0.12); rh.forEach(function (m, k) { tone(m, t0 + 0.01 + k * 0.014, gap ? 2 : dur, 0.12); }); }
   }
   function playNote(m, t, dur, vol) {
     var ins = st.inst;
@@ -1001,17 +1013,17 @@ header { position: relative; justify-content: center; min-height: 46px; }
   function pBass(c, kind, t, slot, vol) {
     var m = kind === "f" ? c.midi[2] : c.midi[0], ins = st.inst;
     if (ins === "baixo") bass(m - 24, t, slot * 1.9, 0.24 * vol);
-    else if (ins === "violao") pluck(gtrVoicing({ midi: [m, m + 4, m + 7] })[0], t, slot * 2.4, 0.2 * vol);
+    else if (ins === "violao") { var vn = voiceNotes(c), lw = kind !== "f" && vn && vn[0] % 12 === c.midi[0] % 12 ? vn[0] : gtrLow(m); pluck(lw, t, slot * 2.4, 0.2 * vol); }
     else tone(m - 12, t, Math.min(slot * 3, 1.6), 0.15 * vol);
   }
   function pChord(c, kind, t, slot, accent) {
-    var n = c.midi, ins = st.inst, soft = kind === "U";
+    var n = voiceNotes(c) || c.midi, ins = st.inst, soft = kind === "U";
     if (ins === "violao") {
-      if (soft) strum(c, true, t, slot * 1.1, 0.14, 4);
-      else strum(c, false, t, slot * 2.2, accent ? 0.21 : 0.17, 6);
+      if (soft) strum(n, true, t, slot * 1.1, 0.14, 4);
+      else strum(n, false, t, slot * 2.2, accent ? 0.21 : 0.17, 6);
     } else if (ins === "teclado") {
       var vv = soft ? 0.09 : accent ? 0.13 : 0.11;
-      if (!soft) tone(n[0] - 12, t, Math.min(slot * 3, 2.2), vv * 0.9);   /* mão esquerda: fundamental grave */
+      if (!soft) tone(c.midi[0] - 12, t, Math.min(slot * 3, 2.2), vv * 0.9);   /* mão esquerda: fundamental grave */
       n.forEach(function (m, k) { tone(m, t + 0.006 + k * 0.01 + Math.random() * 0.004, soft ? slot * 1.3 : Math.min(slot * 2.6, 2), vv * (0.92 + Math.random() * 0.16)); });
     }
   }
@@ -1263,140 +1275,15 @@ header { position: relative; justify-content: center; min-height: 46px; }
     tick();
   }
 
-  /* ---------- diagramas de acordes ---------- */
+  /* ---------- acordes: formas, desenhos e a aba Acordes ---------- */
   var GOPEN = [40, 45, 50, 55, 59, 64], BOPEN = [28, 33, 38, 43];
-  var G_OPEN = { "0M": "x32010", "2M": "xx0232", "4M": "022100", "7M": "320003", "9M": "x02220", "9m": "x02210", "4m": "022000", "2m": "xx0231", "5M": "xx3211", "11d": "x2343x" };
-  var G_SHAPES = [
-    { n: "4 cordas agudas", pop: 3, root: 2, pc: 2, M: [-1, -1, 0, 2, 3, 2], m: [-1, -1, 0, 2, 3, 1], d: [-1, -1, 0, 1, 3, 1] },
-    { n: "Pestana (raiz na 5ª corda)", pop: 2, root: 1, pc: 9, bar: 1, M: [-1, 0, 2, 2, 2, 0], m: [-1, 0, 2, 2, 1, 0], d: [-1, 0, 1, 2, 1, -1] },
-    { n: "Pestana (raiz na 6ª corda)", pop: 1, root: 0, pc: 4, bar: 0, M: [0, 2, 2, 1, 0, 0], m: [0, 2, 2, 0, 0, 0] }
-  ];
-  function guitarVoicings(c) {
-    var pc = pcOf(c.root), out = [], seen = {}, o = G_OPEN[pc + c.q];
-    function add(fr, label, barre, order) {
-      var key = fr.join(","); if (seen[key]) return; seen[key] = 1;
-      var pos = fr.filter(function (x) { return x > 0; }), low = fr.indexOf(0) >= 0 ? 0 : Math.min.apply(null, pos);
-      out.push({ k: "g", fr: fr, label: label, barre: barre, low: low, ord: order + (order >= 1 ? (low > 5 ? 5 : 0) + (low > 8 ? 5 : 0) : 0), midi: fr.map(function (x, i) { return x < 0 ? null : GOPEN[i] + x; }).filter(function (x) { return x !== null; }) });
-    }
-    if (o) add(o.split("").map(function (x) { return x === "x" ? -1 : +x; }), pc === 5 ? "Fácil, sem pestana" : "Aberta, sem pestana", null, pc === 5 ? 1.5 : 0);
-    G_SHAPES.forEach(function (sh, i) {
-      var rel = sh[c.q]; if (!rel) return;
-      var fo = (pc - sh.pc + 12) % 12;
-      add(rel.map(function (x) { return x < 0 ? -1 : x + fo; }), fo === 0 ? "Aberta" : sh.n, sh.bar !== undefined && fo > 0 ? { f: fo, from: sh.root } : null, sh.pop);
-    });
-    return out.sort(function (a, b) { return a.ord - b.ord; });   /* da forma mais usada para a menos usada */
-  }
-  function pianoVoicings(c) {
-    var n = c.midi.slice(), out = [], names = ["Posição fundamental", "1ª inversão", "2ª inversão"], i;
-    for (i = 0; i < 3; i++) { out.push({ k: "p", midi: n.slice(), label: names[i] }); n.push(n.shift() + 12); }
-    return out;
-  }
-  function bassVoicings(c) {
-    var r = c.midi[0] - 24, th = r + (c.midi[1] - c.midi[0]), fi = r + (c.midi[2] - c.midi[0]), out = [], q, f, names = ["E", "A", "D", "G"];
-    function mk(fr, roots, label, midi) { return { k: "b", fr: fr, roots: roots, label: label, midi: midi }; }
-    /* a nota fundamental em cada corda, só nas casas 1 a 12 (sem corda solta), das casas mais baixas para as mais altas */
-    var pos = [];
-    for (q = 0; q < 4; q++) { f = ((r - BOPEN[q]) % 12 + 12) % 12 || 12; pos.push({ q: q, f: f }); }
-    pos.sort(function (x, y) { return x.f - y.f || x.q - y.q; });
-    pos.forEach(function (p) {
-      var fr = [-1, -1, -1, -1], rt = [false, false, false, false]; fr[p.q] = p.f; rt[p.q] = true;
-      out.push(mk(fr, rt, "Fundamental na corda " + fmt(names[p.q]) + ", casa " + p.f, [BOPEN[p.q] + p.f]));
-    });
-    /* arpejo (fundamental, terça e quinta) em volta da fundamental mais baixa */
-    var base = pos[0], ms = [BOPEN[base.q] + base.f], fr2 = [-1, -1, -1, -1], rt2 = [false, false, false, false];
-    fr2[base.q] = base.f; rt2[base.q] = true;
-    [th, fi].forEach(function (n) {
-      while (n < ms[0]) n += 12;
-      var best = -1, bs = 999, qq, ff, sc;
-      for (qq = 0; qq < 4; qq++) { ff = n - BOPEN[qq]; if (ff < 1 || ff > 14 || fr2[qq] >= 0) continue; sc = Math.abs(ff - base.f); if (sc < bs) { bs = sc; best = qq; } }
-      if (best >= 0) { fr2[best] = n - BOPEN[best]; ms.push(n); }
-    });
-    out.push(mk(fr2, rt2, "Arpejo: fundamental, terça e quinta", ms.sort(function (x, y) { return x - y; })));
-    return out;
-  }
-  function dgVoicings(c) { return st.inst === "violao" ? guitarVoicings(c) : st.inst === "baixo" ? bassVoicings(c) : pianoVoicings(c); }
-  /* braço: fr = casa de cada corda (-1 não toca, 0 solta); mostra 4 casas a partir da primeira usada */
-  function fretSvg(nS, fr, o) {
-    var dx = nS === 6 ? 16 : 22, x0 = 24, y0 = 26, dy = 21, W = x0 + (nS - 1) * dx + 20, H = y0 + 4 * dy + 8, i, s;
-    var pos = fr.filter(function (x) { return x > 0; }), mx = Math.max.apply(null, pos.concat([0])), base = mx > 4 ? Math.min.apply(null, pos) : 1;
-    s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + o.aria + '">';
-    if (base === 1) s += '<rect class="fb-nut" x="' + x0 + '" y="' + (y0 - 3) + '" width="' + ((nS - 1) * dx) + '" height="4" rx="1"/>';
-    for (i = (base === 1 ? 1 : 0); i <= 4; i++) s += '<line class="fb-l" x1="' + x0 + '" x2="' + (x0 + (nS - 1) * dx) + '" y1="' + (y0 + i * dy) + '" y2="' + (y0 + i * dy) + '"/>';
-    for (i = 0; i < nS; i++) s += '<line class="fb-s" x1="' + (x0 + i * dx) + '" x2="' + (x0 + i * dx) + '" y1="' + y0 + '" y2="' + (y0 + 4 * dy) + '"/>';
-    if (base > 1) s += '<text class="fb-c" x="' + (x0 + (nS - 1) * dx + 6) + '" y="' + (y0 + dy / 2 + 3) + '">' + base + 'ª</text>';
-    if (o.barre) s += '<rect class="fb-bar" x="' + (x0 + o.barre.from * dx - 7) + '" y="' + (y0 + (o.barre.f - base + 0.5) * dy - 7) + '" width="' + (((o.barre.to === undefined ? nS - 1 : o.barre.to) - o.barre.from) * dx + 14) + '" height="14" rx="7"/>';
-    fr.forEach(function (x, k) {
-      var cx = x0 + k * dx;
-      if (x < 0) { if (!o.noMute) s += '<text class="fb-x" x="' + cx + '" y="' + (y0 - 9) + '">×</text>'; }
-      else if (x === 0) s += '<circle class="fb-o" cx="' + cx + '" cy="' + (y0 - 11) + '" r="3.8"/>';
-      else s += '<circle class="' + (o.roots[k] ? "fb-r" : "fb-d") + '" cx="' + cx + '" cy="' + (y0 + (x - base + 0.5) * dy) + '" r="6.2"/>';
-    });
-    return s + '</svg>';
-  }
-  /* teclado: duas oitavas a partir do dó mais próximo abaixo da nota mais grave */
-  function pianoSvg(midis, rootPc, aria) {
-    var WP = [0, 2, 4, 5, 7, 9, 11], kw = 15, bw = 9.5, H = 76, NW = 17, start = Math.floor(Math.min.apply(null, midis) / 12) * 12, i, s;
-    s = '<svg viewBox="0 0 ' + (NW * kw + 2) + ' ' + (H + 4) + '" role="img" aria-label="' + aria + '">';
-    for (i = 0; i < NW; i++) {
-      var m = start + 12 * Math.floor(i / 7) + WP[i % 7], on = midis.indexOf(m) >= 0;
-      s += '<rect class="' + (on ? "pk-w pk-on" : "pk-w") + '" x="' + (1 + i * kw) + '" y="1" width="' + (kw - 1) + '" height="' + H + '" rx="2.5"/>';
-      if (on && m % 12 === rootPc) s += '<circle class="fb-r" cx="' + (1 + i * kw + (kw - 1) / 2) + '" cy="' + (H - 9) + '" r="3.6"/>';
-    }
-    for (i = 0; i < NW - 1; i++) {
-      var w = WP[i % 7]; if ([0, 2, 5, 7, 9].indexOf(w) < 0) continue;
-      var bm = start + 12 * Math.floor(i / 7) + w + 1, bo = midis.indexOf(bm) >= 0;
-      s += '<rect class="' + (bo ? "pk-b pk-on" : "pk-b") + '" x="' + (1 + (i + 1) * kw - bw / 2 - 0.5) + '" y="1" width="' + bw + '" height="' + (H * 0.6) + '" rx="2"/>';
-      if (bo && bm % 12 === rootPc) s += '<circle class="fb-r" cx="' + (1 + (i + 1) * kw - 0.5) + '" cy="' + (H * 0.6 - 8) + '" r="3"/>';
-    }
-    return s + '</svg>';
-  }
-  function dgFigure(v, c) {
-    var pc = pcOf(c.root), nm = chordName(c.root, c.q);
-    if (v.k === "p") return pianoSvg(v.midi, pc, "Teclado: " + nm);
-    if (v.k === "b") return fretSvg(4, v.fr, { roots: v.roots, noMute: true, aria: "Baixo: " + nm });
-    return fretSvg(6, v.fr, { roots: v.fr.map(function (x, i) { return x >= 0 && (GOPEN[i] + x) % 12 === pc; }), barre: v.barre, aria: "Violão: " + nm });
-  }
-  function playVoicing(v) {
-    var a = audio(); if (!a) return;
-    stopAll(); paintPanel();
-    var t = a.currentTime + 0.03, ins = st.inst;
-    v.midi.forEach(function (m, k) {
-      var tt = t + k * (ins === "violao" ? 0.011 : ins === "baixo" ? 0.28 : 0.014);
-      if (ins === "violao") pluck(m, tt, 2.4, 0.2);
-      else if (ins === "baixo") bass(m, tt, 1.2, 0.24);
-      else tone(m, tt, 2.2, 0.12);
-    });
-  }
-  var dgSig = "", dgCur = null, dgKey = "", dgPanel = document.getElementById("dgPanel");
-  var INS_NAME = { teclado: "Teclado", violao: "Violão", baixo: "Baixo" };
-  function paintDiagram() {
-    if (!dgPanel) return;
-    var info = keyInfo(), d = playing >= 0 ? playing : st.sel, c = info.chords[d], vs = dgVoicings(c), key = st.inst + "|" + c.root + c.q, vi = Math.min(st.voi[key] || 0, vs.length - 1), v = vs[vi];
-    var sig = [st.p, st.mode, st.nt, st.inst, d, vi].join("|");
-    if (sig === dgSig) return; dgSig = sig; dgCur = v; dgKey = key;
-    var notes = [0, 2, 4].map(function (k) { return fmt(info.scale[(d + k) % 7]); }).join(" · ");
-    var pos = v.k === "g" && Math.max.apply(null, v.fr) > 4 ? " · a partir da " + Math.min.apply(null, v.fr.filter(function (x) { return x > 0; })) + "ª casa" : "";
-    dgPanel.innerHTML =
-      '<div class="dgp-h"><span class="inst-l">Como tocar</span><span class="dgp-i">' + INS_NAME[st.inst] + '</span></div>' +
-      '<div class="dgp-b' + (v.k === "p" ? " col" : "") + '"><button class="dgp-fig" data-ouvir="1" aria-label="Ouvir esta posição">' + dgFigure(v, c) + '</button>' +
-      '<div class="dgp-t"><div class="dgp-n">' + chordName(c.root, c.q) + '</div><div class="dgp-s">' + roman(d, c.q) + ' grau · ' + (c.q === "m" ? "menor" : c.q === "d" ? "diminuto" : "maior") + '</div>' +
-      '<div class="dgp-no">Notas: ' + notes + '</div><div class="dgp-l">' + v.label + pos + '</div>' +
-      '<button class="dgp-play" data-ouvir="1">' + PLAY + 'Ouvir</button></div></div>' +
-      '<div class="dgp-c"><div class="pill" role="group" aria-label="Posição">' + vs.map(function (x, i) { return '<button data-v="' + i + '" aria-pressed="' + (i === vi) + '">' + (i + 1) + '</button>'; }).join("") + '</div><small>' + (vs.length > 1 ? "outras formas de tocar este acorde" : "uma forma") + '</small></div>';
-  }
-  if (dgPanel) dgPanel.addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
-    if (b.dataset.v !== undefined) { st.voi[dgKey] = +b.dataset.v; dgSig = ""; paintDiagram(); }
-    else if (b.dataset.ouvir && dgCur) playVoicing(dgCur);
-  });
-
-  /* ---------- aba Acordes: todos os tipos de acorde, por classe ---------- */
   var AX_RN = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"], AX_ALT = ["", "D♭", "", "D♯", "", "", "G♭", "", "G♯", "", "A♯", ""];
   var AX_T = {
     M: { s: "", n: "Maior", iv: [0, 4, 7] }, m: { s: "m", n: "Menor", iv: [0, 3, 7] }, dim: { s: "°", n: "Diminuto", iv: [0, 3, 6] }, aug: { s: "+", n: "Aumentado", iv: [0, 4, 8] },
     "7": { s: "7", n: "Sétima (dominante)", iv: [0, 4, 7, 10] }, m7: { s: "m7", n: "Menor com sétima", iv: [0, 3, 7, 10] }, maj7: { s: "maj7", n: "Sétima maior (7M)", iv: [0, 4, 7, 11] },
     m7b5: { s: "m7(♭5)", n: "Meio-diminuto", iv: [0, 3, 6, 10] }, dim7: { s: "°7", n: "Diminuto com sétima", iv: [0, 3, 6, 9] },
     add9: { s: "add9", n: "Com nona (add9)", iv: [0, 4, 7, 14] }, "9": { s: "9", n: "Nona (dominante)", iv: [0, 4, 7, 10, 14] }, m9: { s: "m9", n: "Menor com nona", iv: [0, 3, 7, 10, 14] }, maj9: { s: "maj9", n: "Sétima maior com nona", iv: [0, 4, 7, 11, 14] },
+    "11": { s: "11", n: "Décima primeira (dominante)", iv: [0, 4, 7, 10, 14, 17] }, m11: { s: "m11", n: "Menor com décima primeira", iv: [0, 3, 7, 10, 14, 17] }, "13": { s: "13", n: "Décima terceira (dominante)", iv: [0, 4, 7, 10, 14, 21] },
     sus2: { s: "sus2", n: "Suspenso de 2ª", iv: [0, 2, 7] }, sus4: { s: "sus4", n: "Suspenso de 4ª", iv: [0, 5, 7] }, "7sus4": { s: "7sus4", n: "Sétima suspensa", iv: [0, 5, 7, 10] },
     "6": { s: "6", n: "Com sexta", iv: [0, 4, 7, 9] }, m6: { s: "m6", n: "Menor com sexta", iv: [0, 3, 7, 9] },
     "7b5": { s: "7(♭5)", n: "Sétima com quinta bemol", iv: [0, 4, 6, 10] }, "7b9": { s: "7(♭9)", n: "Sétima com nona bemol", iv: [0, 4, 7, 10, 13] }, "7#9": { s: "7(♯9)", n: "Sétima com nona sustenida", iv: [0, 4, 7, 10, 15] }
@@ -1405,12 +1292,15 @@ header { position: relative; justify-content: center; min-height: 46px; }
     { id: "b", n: "Básicos", d: "Os três acordes do campo harmônico: maior, menor e diminuto.", t: ["M", "m", "dim"] },
     { id: "s7", n: "Sétimas (7)", d: "Quatro notas. Dão cor e tensão. Os mais usados em música popular e gospel.", t: ["7", "m7", "maj7", "m7b5", "dim7"] },
     { id: "n9", n: "Nonas (9)", d: "Cinco notas. Soam mais cheios, muito usados no jazz, MPB e gospel.", t: ["add9", "9", "m9", "maj9"] },
+    { id: "ex", n: "Extensões (11, 13)", d: "Notas além da nona: soam grandes e ricos, comuns no jazz e no gospel.", t: ["11", "m11", "13"] },
     { id: "su", n: "Suspensos", d: "Trocam a terça por outra nota e deixam o acorde “no ar”.", t: ["sus2", "sus4", "7sus4"] },
     { id: "s6", n: "Sextas (6)", d: "Acordes com a sexta: soam doces e “fechados”.", t: ["6", "m6"] },
     { id: "al", n: "Alterados (♯ ♭)", d: "Notas subidas ou descidas meio tom. Aparecem em jazz, blues e finais de frase.", t: ["aug", "7b5", "7b9", "7#9"] }
   ];
   var AX_FIELD = { M: 1, m: 1, dim: 1, "7": 1, m7: 1, maj7: 1, m7b5: 1 };
-  var ax = { root: 0, cls: "b", type: "M", voi: {}, br: 0, bl: "g" }, axSig = "", axCur = null, axKey = "";
+  /* bass: nota do baixo trocado (null = a fundamental). voi: posição escolhida de cada acorde, compartilhada entre as abas e a progressão. */
+  var ax = { root: 0, cls: "b", type: "M", voi: {}, br: 0, bl: "g", bass: null }, axSig = "", axCtx = { v: null, key: "" }, dgCtx = { v: null, key: "" };
+  function axKey(pc, type, bass) { return st.inst + "|" + pc + "|" + type + "|" + (bass === null || bass === undefined ? "" : bass); }
   var AX_GO = { "0|M": "x32010", "2|M": "xx0232", "4|M": "022100", "7|M": "320003", "9|M": "x02220", "5|M": "xx3211", "9|m": "x02210", "4|m": "022000", "2|m": "xx0231",
     "0|7": "x32310", "2|7": "xx0212", "4|7": "020100", "7|7": "320001", "9|7": "x02020", "11|7": "x21202", "9|m7": "x02010", "4|m7": "020000", "2|m7": "xx0211",
     "0|maj7": "x32000", "2|maj7": "xx0222", "5|maj7": "xx3210", "7|maj7": "320002", "9|maj7": "x02120", "4|maj7": "021100", "2|sus4": "xx0233", "9|sus4": "x02230", "4|sus4": "022200",
@@ -1425,11 +1315,27 @@ header { position: relative; justify-content: center; min-height: 46px; }
     sus4: { E: [0, 2, 2, 2, 0, 0], A: [-1, 0, 2, 2, 3, 0], D: [-1, -1, 0, 2, 3, 3] }, "7sus4": { E: [0, 2, 0, 2, 0, 0], A: [-1, 0, 2, 0, 3, 0], D: [-1, -1, 0, 2, 1, 3] },
     "6": { E: [0, 2, 2, 1, 2, 0], A: [-1, 0, 2, 2, 2, 2], D: [-1, -1, 0, 2, 0, 2] }, m6: { E: [0, 2, 2, 0, 2, 0], A: [-1, 0, 2, 2, 1, 2] },
     add9: { E: [0, 2, 2, 1, 0, 2], A: [-1, 0, 2, 4, 2, 0] }, "9": { E: [0, 2, 0, 1, 0, 2], A: [-1, 0, -1, 0, 0, 0] }, m9: { E: [0, 2, 0, 0, 0, 2], A: [-1, 0, -2, 0, 0, 0] },
-    maj9: { A: [-1, 0, -1, 1, 0, 0] }, "7b9": { A: [-1, 0, -1, 0, -1, 0] }, "7#9": { A: [-1, 0, -1, 0, 1, -1] }, "7b5": { A: [-1, 0, 1, 0, 2, -1] }
+    maj9: { A: [-1, 0, -1, 1, 0, 0] }, "7b9": { A: [-1, 0, -1, 0, -1, 0] }, "7#9": { A: [-1, 0, -1, 0, 1, -1] }, "7b5": { A: [-1, 0, 1, 0, 2, -1] },
+    "11": { A: [-1, 0, 0, 0, 0, 0] }, m11: { A: [-1, 0, 0, 0, 1, 0] }, "13": { E: [0, 2, 0, 1, 2, 0], A: [-1, 0, -1, 0, 2, 2] }
   };
   var AX_GM = { E: { root: 0, pc: 4, pop: 1, n: "Raiz na 6ª corda" }, A: { root: 1, pc: 9, pop: 2, n: "Raiz na 5ª corda" }, D: { root: 2, pc: 2, pop: 3, n: "4 cordas agudas" } };
+  var AX_DEG = { 0: "1", 2: "2", 3: "♭3", 4: "3", 5: "4", 6: "♭5", 7: "5", 8: "♯5", 9: "6", 10: "♭7", 11: "7", 13: "♭9", 14: "9", 15: "♯9", 17: "11", 21: "13" };
+  var AX_BR = [["Braço todo", 1, 12], ["Casas 1–5", 1, 5], ["Casas 5–9", 5, 9], ["Casas 8–12", 8, 12]];
+  function axDegs(type) { return AX_T[type].iv.map(function (x) { return AX_DEG[x]; }); }
+  function axPcs(pc, type) { return AX_T[type].iv.map(function (x) { return (pc + x) % 12; }); }
+  /* grafia correta de cada nota: a letra segue o grau do acorde (ex.: sétima de Dó é Si♭, terça de Mi é Sol♯) */
+  function axNames(pc, type, rootName) {
+    var L = ["C", "D", "E", "F", "G", "A", "B"], NAT = [0, 2, 4, 5, 7, 9, 11], DEG = { 0: 0, 1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 4, 7: 4, 8: 4, 9: 5, 10: 6, 11: 6, 13: 1, 14: 1, 15: 1, 17: 3, 21: 5 }, li = L.indexOf((rootName || AX_RN[pc])[0]);
+    return AX_T[type].iv.map(function (x) {
+      var idx = (li + DEG[x]) % 7, p = (pc + x) % 12, d = (p - NAT[idx] + 12) % 12; if (d > 6) d -= 12;
+      return fmt(L[idx] + (d > 0 ? "♯".repeat(d) : "♭".repeat(-d)));
+    });
+  }
+  function axBassName(pc, type, bass, rootName) { var nm = axNames(pc, type, rootName), p = axPcs(pc, type), i = p.indexOf(bass); return i >= 0 ? nm[i] : fmt(AX_RN[bass]); }
+  function axName(pc, type, bass, rootName) { return (rootName ? fmt(rootName) : fmt(AX_RN[pc])) + AX_T[type].s + (bass !== null && bass !== undefined && bass !== pc ? "/" + axBassName(pc, type, bass, rootName) : ""); }
+
   /* violão: da forma mais usada para a menos usada */
-  function axGuitar(pc, type) {
+  function axGuitarBase(pc, type) {
     var out = [], seen = {}, o = AX_GO[pc + "|" + type];
     function add(fr, label, barre, ord) {
       var key = fr.join(","); if (seen[key]) return; seen[key] = 1;
@@ -1449,33 +1355,101 @@ header { position: relative; justify-content: center; min-height: 46px; }
     });
     return out.sort(function (a, b) { return a.ord - b.ord; });
   }
-  function axPiano(pc, type) {
-    var base = 48 + pc, n = AX_T[type].iv.map(function (x) { return base + x; }), out = [], nm = ["Posição fundamental", "1ª inversão", "2ª inversão", "3ª inversão"], i;
-    for (i = 0; i < Math.min(n.length, 4); i++) { out.push({ k: "p", midi: n.slice().sort(function (a, b) { return a - b; }), label: nm[i] }); n.push(n.shift() + 12); }
+  /* baixo trocado no violão: põe a nota do baixo numa corda mais grave (ou troca a mais grave), se a mão alcançar */
+  function axSlashG(v, bpc, pcs, noteName) {
+    var fr = v.fr.slice(), played = [], i, j;
+    fr.forEach(function (x, k) { if (x >= 0) played.push(k); });
+    if (!played.length) return null;
+    var low = played[0], pos = fr.filter(function (x) { return x > 0; }), lo = pos.length ? Math.min.apply(null, pos) : 0, hi = pos.length ? Math.max.apply(null, pos) : 0;
+    function fits(f) { if (f === 0) return true; return Math.max(hi, f) - Math.min(lo || f, f) <= 4; }
+    function find(idx, restMin) { var f; for (f = 0; f <= 14; f++) { if ((GOPEN[idx] + f) % 12 !== bpc || !fits(f) || GOPEN[idx] + f >= restMin) continue; return f; } return -1; }
+    var barre = v.barre ? { f: v.barre.f, from: v.barre.from, to: v.barre.to } : null, done = false;
+    for (i = low - 1; i >= 0 && !done; i--) {
+      var f = find(i, GOPEN[low] + fr[low]);
+      if (f >= 0) { fr[i] = f; for (j = i + 1; j < low; j++) fr[j] = pcs.indexOf(GOPEN[j] % 12) >= 0 && GOPEN[j] > GOPEN[i] + f ? 0 : -1; done = true; }
+    }
+    if (!done) {   /* se o baixo já é uma das notas da forma, basta abafar as cordas mais graves (ex.: G/B = x20003) */
+      var f3 = fr.slice(), pl = played.slice();
+      while (pl.length > 3 && (GOPEN[pl[0]] + f3[pl[0]]) % 12 !== bpc) { f3[pl[0]] = -1; pl.shift(); }
+      if (pl.length < played.length && pl.length >= 3 && (GOPEN[pl[0]] + f3[pl[0]]) % 12 === bpc) {
+        fr = f3; done = true;
+        if (barre && barre.from < pl[0]) { barre.from = pl[0]; if (barre.from >= barre.to) barre = null; }
+      }
+    }
+    if (!done && (GOPEN[low] + fr[low]) % 12 !== bpc) {
+      var rest = played.slice(1), restMin = rest.length ? Math.min.apply(null, rest.map(function (k) { return GOPEN[k] + fr[k]; })) : 999, f2 = find(low, restMin);
+      if (f2 >= 0) { fr[low] = f2; done = true; if (barre && barre.from === low) { barre.from++; if (barre.from >= barre.to) barre = null; } }
+    }
+    if (!done) return null;
+    return { k: "g", fr: fr, label: v.label + " · baixo em " + noteName, barre: barre, ord: v.ord, midi: fr.map(function (x, k) { return x < 0 ? null : GOPEN[k] + x; }).filter(function (x) { return x !== null; }) };
+  }
+  function axGuitar(pc, type, bass, rootName) {
+    var base = axGuitarBase(pc, type);
+    if (bass === null || bass === undefined || bass === pc) return base;
+    var pcs = axPcs(pc, type), nn = axBassName(pc, type, bass, rootName);
+    var out = base.map(function (v) { return axSlashG(v, bass, pcs, nn); }).filter(function (v) { return v; });
+    return out.length ? out : [{ k: "g", fr: [-1, -1, -1, -1, -1, -1], label: "Sem forma pronta com este baixo", midi: [], none: true, ord: 99 }];
+  }
+  function axPiano(pc, type, bass, rootName) {
+    var base = 48 + pc, n = AX_T[type].iv.map(function (x) { return base + x; }), out = [], nm = ["Posição fundamental", "1ª inversão", "2ª inversão", "3ª inversão"], i, hasB = bass !== null && bass !== undefined && bass !== pc;
+    for (i = 0; i < Math.min(n.length, 4); i++) {
+      var ms = n.slice().sort(function (a, b) { return a - b; }), lb = nm[i];
+      if (hasB) { var b = ms[0] - 1; while (b % 12 !== bass) b--; ms.unshift(b); lb += " · baixo em " + axBassName(pc, type, bass, rootName); }
+      out.push({ k: "p", midi: ms, label: lb }); n.push(n.shift() + 12);
+    }
     return out;
   }
-  var AX_DEG = { 0: "1", 2: "2", 3: "♭3", 4: "3", 5: "4", 6: "♭5", 7: "5", 8: "♯5", 9: "6", 10: "♭7", 11: "7", 13: "♭9", 14: "9", 15: "♯9" };
-  var AX_BR = [["Braço todo", 1, 12], ["Casas 1–5", 1, 5], ["Casas 5–9", 5, 9], ["Casas 8–12", 8, 12]];
-  function axDegs(type) { return AX_T[type].iv.map(function (x) { return AX_DEG[x]; }); }
   /* baixo: toca nota por nota, então mostra onde ficam as notas do acorde no braço (casas 1 a 12, sem corda solta) */
-  function axBassArp(pc, type) {
-    var iv = AX_T[type].iv, r = 28 + ((pc - 4 + 12) % 12), q, f, best = { f: 99, q: 0 };
-    for (q = 0; q < 4; q++) { f = ((r - BOPEN[q]) % 12 + 12) % 12 || 12; if (f < best.f) best = { f: f, q: q }; }
+  function axBassArp(pc, type, bass) {
+    var iv = AX_T[type].iv, hasB = bass !== null && bass !== undefined && bass !== pc, r = 28 + ((pc - 4 + 12) % 12), rb = hasB ? 28 + ((bass - 4 + 12) % 12) : r, q, f, best = { f: 99, q: 0 };
+    for (q = 0; q < 4; q++) { f = ((rb - BOPEN[q]) % 12 + 12) % 12 || 12; if (f < best.f) best = { f: f, q: q }; }
     var tones = iv.map(function (x) { return r + x; }), pick = tones.length > 4 ? [tones[1], tones[3], tones[2]] : tones.slice(1), ms = [BOPEN[best.q] + best.f];
+    if (hasB) { pick = pick.filter(function (n) { return n % 12 !== bass; }); pick.push(tones[0]); }
     pick.forEach(function (n) { while (n < ms[0]) n += 12; ms.push(n); });
     return { k: "b", midi: ms.sort(function (a, b) { return a - b; }), label: "Arpejo do acorde" };
   }
-  function axNames(pc, type) {
-    var L = ["C", "D", "E", "F", "G", "A", "B"], NAT = [0, 2, 4, 5, 7, 9, 11], DEG = { 0: 0, 1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 4, 7: 4, 8: 4, 9: 5, 10: 6, 11: 6, 13: 1, 14: 1, 15: 1 }, li = L.indexOf(AX_RN[pc][0]);
-    return AX_T[type].iv.map(function (x) {
-      var idx = (li + DEG[x]) % 7, p = (pc + x) % 12, d = (p - NAT[idx] + 12) % 12; if (d > 6) d -= 12;
-      return fmt(L[idx] + (d > 0 ? "♯".repeat(d) : "♭".repeat(-d)));
+  function axVoic(pc, type, bass, rootName) { return st.inst === "violao" ? axGuitar(pc, type, bass, rootName) : st.inst === "baixo" ? [axBassArp(pc, type, bass)] : axPiano(pc, type, bass, rootName); }
+
+  /* ---------- desenhos ---------- */
+  /* braço do violão: fr = casa de cada corda (-1 não toca, 0 solta); mostra 4 casas a partir da primeira usada */
+  function fretSvg(nS, fr, o) {
+    var dx = nS === 6 ? 16 : 22, x0 = 24, y0 = 26, dy = 21, W = x0 + (nS - 1) * dx + 20, H = y0 + 4 * dy + 8, i, s;
+    var pos = fr.filter(function (x) { return x > 0; }), mx = Math.max.apply(null, pos.concat([0])), base = mx > 4 ? Math.min.apply(null, pos) : 1;
+    s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + o.aria + '">';
+    if (base === 1) s += '<rect class="fb-nut" x="' + x0 + '" y="' + (y0 - 3) + '" width="' + ((nS - 1) * dx) + '" height="4" rx="1"/>';
+    for (i = (base === 1 ? 1 : 0); i <= 4; i++) s += '<line class="fb-l" x1="' + x0 + '" x2="' + (x0 + (nS - 1) * dx) + '" y1="' + (y0 + i * dy) + '" y2="' + (y0 + i * dy) + '"/>';
+    for (i = 0; i < nS; i++) s += '<line class="fb-s" x1="' + (x0 + i * dx) + '" x2="' + (x0 + i * dx) + '" y1="' + y0 + '" y2="' + (y0 + 4 * dy) + '"/>';
+    if (base > 1) s += '<text class="fb-c" x="' + (x0 + (nS - 1) * dx + 6) + '" y="' + (y0 + dy / 2 + 3) + '">' + base + 'ª</text>';
+    if (o.barre) s += '<rect class="fb-bar" x="' + (x0 + o.barre.from * dx - 7) + '" y="' + (y0 + (o.barre.f - base + 0.5) * dy - 7) + '" width="' + (((o.barre.to === undefined ? nS - 1 : o.barre.to) - o.barre.from) * dx + 14) + '" height="14" rx="7"/>';
+    fr.forEach(function (x, k) {
+      var cx = x0 + k * dx;
+      if (x < 0) { if (!o.noMute) s += '<text class="fb-x" x="' + cx + '" y="' + (y0 - 9) + '">×</text>'; }
+      else if (x === 0) s += '<circle class="fb-o" cx="' + cx + '" cy="' + (y0 - 11) + '" r="3.8"/>';
+      else s += '<circle class="' + (o.roots[k] ? "fb-r" : "fb-d") + '" cx="' + cx + '" cy="' + (y0 + (x - base + 0.5) * dy) + '" r="6.2"/>';
     });
+    return s + '</svg>';
   }
-  function axName(pc, type) { return fmt(AX_RN[pc]) + AX_T[type].s; }
-  function axVoic(pc, type) { return st.inst === "violao" ? axGuitar(pc, type) : st.inst === "baixo" ? [axBassArp(pc, type)] : axPiano(pc, type); }
-  function axNeck(pc, type, rg, mode, aria) {
-    var a = rg[1], b = rg[2], n = b - a + 1, fw = 400 / n, x0 = 22, y0 = 26, dy = 26, W = 424, H = 134, i, j, s, nm = axNames(pc, type), iv = AX_T[type].iv;
+  /* teclado: a partir do dó mais próximo abaixo da nota mais grave; 17 teclas brancas, ou 22 se o acorde for muito aberto */
+  function pianoSvg(midis, rootPc, aria) {
+    var WP = [0, 2, 4, 5, 7, 9, 11], kw = 15, bw = 9.5, H = 76, start = Math.floor(Math.min.apply(null, midis) / 12) * 12, NW = Math.max.apply(null, midis) - start > 27 ? 22 : 17, i, s;
+    if (NW === 22) kw = 12, bw = 7.6;
+    s = '<svg viewBox="0 0 ' + (NW * kw + 2) + ' ' + (H + 4) + '" role="img" aria-label="' + aria + '">';
+    for (i = 0; i < NW; i++) {
+      var m = start + 12 * Math.floor(i / 7) + WP[i % 7], on = midis.indexOf(m) >= 0;
+      s += '<rect class="' + (on ? "pk-w pk-on" : "pk-w") + '" x="' + (1 + i * kw) + '" y="1" width="' + (kw - 1) + '" height="' + H + '" rx="2.5"/>';
+      if (on && m % 12 === rootPc) s += '<circle class="fb-r" cx="' + (1 + i * kw + (kw - 1) / 2) + '" cy="' + (H - 9) + '" r="3.4"/>';
+    }
+    for (i = 0; i < NW - 1; i++) {
+      var w = WP[i % 7]; if ([0, 2, 5, 7, 9].indexOf(w) < 0) continue;
+      var bm = start + 12 * Math.floor(i / 7) + w + 1, bo = midis.indexOf(bm) >= 0;
+      s += '<rect class="' + (bo ? "pk-b pk-on" : "pk-b") + '" x="' + (1 + (i + 1) * kw - bw / 2 - 0.5) + '" y="1" width="' + bw + '" height="' + (H * 0.6) + '" rx="2"/>';
+      if (bo && bm % 12 === rootPc) s += '<circle class="fb-r" cx="' + (1 + (i + 1) * kw - 0.5) + '" cy="' + (H * 0.6 - 8) + '" r="3"/>';
+    }
+    return s + '</svg>';
+  }
+  /* baixo: mapa do braço com as notas do acorde; a nota em rosa é a fundamental (ou o baixo trocado) */
+  function axNeck(pc, type, bass, rg, mode, aria, rootName) {
+    var a = rg[1], b = rg[2], n = b - a + 1, fw = 400 / n, x0 = 22, y0 = 26, dy = 26, W = 424, H = 134, i, j, s, nm = axNames(pc, type, rootName), iv = AX_T[type].iv, emph = bass === null || bass === undefined ? pc : bass;
     s = '<svg class="neck" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + aria + '">';
     for (i = 0; i <= n; i++) s += '<line class="' + (i === 0 && a === 1 ? "nk-nut" : "nk-l") + '" x1="' + (x0 + i * fw) + '" x2="' + (x0 + i * fw) + '" y1="' + y0 + '" y2="' + (y0 + 3 * dy) + '"/>';
     for (i = 0; i < 4; i++) s += '<line class="nk-s" x1="' + x0 + '" x2="' + (x0 + n * fw) + '" y1="' + (y0 + i * dy) + '" y2="' + (y0 + i * dy) + '"/>';
@@ -1491,64 +1465,164 @@ header { position: relative; justify-content: center; min-height: 46px; }
         var p = (BO[q] + i) % 12, k = -1; for (j = 0; j < iv.length; j++) { if ((pc + iv[j]) % 12 === p) { k = j; break; } }
         if (k < 0) continue;
         var lb = mode === "g" ? AX_DEG[iv[k]] : nm[k];
-        s += '<circle class="' + (k === 0 ? "nk-r" : "nk-d") + '" cx="' + (x0 + (i - a + 0.5) * fw) + '" cy="' + (y0 + q * dy) + '" r="' + r + '"/><text class="nk-g" style="font-size:' + (lb.length > 2 ? 8 : 10) + 'px" x="' + (x0 + (i - a + 0.5) * fw) + '" y="' + (y0 + q * dy + 3.5) + '">' + lb + '</text>';
+        s += '<circle class="' + (p === emph ? "nk-r" : "nk-d") + '" cx="' + (x0 + (i - a + 0.5) * fw) + '" cy="' + (y0 + q * dy) + '" r="' + r + '"/><text class="nk-g" style="font-size:' + (lb.length > 2 ? 8 : 10) + 'px" x="' + (x0 + (i - a + 0.5) * fw) + '" y="' + (y0 + q * dy + 3.5) + '">' + lb + '</text>';
       }
     }
     return s + '</svg>';
   }
-  function axFigure(v, pc, name) {
-    if (v.k === "p") return pianoSvg(v.midi, pc, name);
-    return fretSvg(6, v.fr, { roots: v.fr.map(function (x, i) { return x >= 0 && (GOPEN[i] + x) % 12 === pc; }), barre: v.barre, aria: name });
+  function axFigure(v, pc, name, emph) {
+    if (v.k === "p") return pianoSvg(v.midi, emph, name);
+    if (v.none) return '<svg viewBox="0 0 120 40" role="img" aria-label="' + name + '"></svg>';
+    return fretSvg(6, v.fr, { roots: v.fr.map(function (x, i) { return x >= 0 && (GOPEN[i] + x) % 12 === emph; }), barre: v.barre, aria: name });
   }
+  function playVoicing(v) {
+    var a = audio(); if (!a || !v || !v.midi.length) return;
+    stopAll(); paintPanel();
+    var t = a.currentTime + 0.03, ins = st.inst;
+    v.midi.forEach(function (m, k) {
+      var tt = t + k * (ins === "violao" ? 0.011 : ins === "baixo" ? 0.28 : 0.014);
+      if (ins === "violao") pluck(m, tt, 2.4, 0.2);
+      else if (ins === "baixo") bass(m, tt, 1.2, 0.24);
+      else tone(m, tt, 2.2, 0.12);
+    });
+  }
+  var INS_NAME = { teclado: "Teclado", violao: "Violão", baixo: "Baixo" };
+
+  /* painel "Como tocar", usado no Círculo (campo harmônico) e na aba Acordes */
+  function axPanelHTML(pc, type, bass, sub, slash, rootName) {
+    var vs = axVoic(pc, type, bass, rootName), key = axKey(pc, type, bass), vi = Math.min(ax.voi[key] || 0, vs.length - 1), v = vs[vi];
+    var nm = axName(pc, type, bass, rootName), nts = axNames(pc, type, rootName).join(" · "), emph = bass === null || bass === undefined ? pc : bass, h;
+    if (st.inst === "baixo") {
+      h = '<div class="dgp-h"><span class="inst-l">Onde tocar</span><span class="dgp-i">Baixo</span></div>' +
+        '<div class="dgp-t" style="margin-bottom:8px"><div class="dgp-n">' + nm + '</div><div class="dgp-s">' + sub + '</div><div class="dgp-no">Notas: ' + nts + ' &nbsp;(graus ' + axDegs(type).join(" · ") + ')</div></div>' +
+        axNeck(pc, type, bass, AX_BR[ax.br], ax.bl, "Baixo: notas de " + nm, rootName) +
+        '<div class="dgp-c"><div class="pill wrap" role="group" aria-label="Região do braço">' + AX_BR.map(function (x, i) { return '<button data-abr="' + i + '" aria-pressed="' + (i === ax.br) + '">' + x[0] + '</button>'; }).join("") + '</div></div>' +
+        '<div class="dgp-c"><div class="pill" role="group" aria-label="Mostrar"><button data-abl="g" aria-pressed="' + (ax.bl === "g") + '">Graus</button><button data-abl="n" aria-pressed="' + (ax.bl === "n") + '">Notas</button></div><button class="dgp-play" data-aplay="1" style="margin-top:0">' + PLAY + 'Ouvir arpejo</button></div>' +
+        '<div class="axleg" style="margin-top:8px"><i style="background:var(--ton)"></i> ' + (emph === pc ? "fundamental" : "baixo trocado") + ' &nbsp; <i style="background:var(--brand)"></i> outras notas do acorde</div>';
+    } else {
+      var ps = v.k === "g" && !v.none && Math.max.apply(null, v.fr) > 4 ? " · a partir da " + Math.min.apply(null, v.fr.filter(function (x) { return x > 0; })) + "ª casa" : "";
+      h = '<div class="dgp-h"><span class="inst-l">Como tocar</span><span class="dgp-i">' + INS_NAME[st.inst] + '</span></div>' +
+        '<div class="dgp-b' + (v.k === "p" ? " col" : "") + '"><button class="dgp-fig" data-aplay="1" aria-label="Ouvir">' + axFigure(v, pc, "Acorde " + nm, emph) + '</button>' +
+        '<div class="dgp-t"><div class="dgp-n">' + nm + '</div><div class="dgp-s">' + sub + '</div><div class="dgp-no">Notas: ' + nts + '</div>' +
+        '<div class="dgp-l">' + v.label + ps + '</div><button class="dgp-play" data-aplay="1">' + PLAY + 'Ouvir</button></div></div>' +
+        '<div class="dgp-c"><div class="pill" role="group" aria-label="Posição">' + vs.map(function (x, i) { return '<button data-av="' + i + '" aria-pressed="' + (i === vi) + '">' + (i + 1) + '</button>'; }).join("") + '</div><small>' + (vs.length > 1 ? "outras formas de tocar este acorde" : "uma forma") + '</small></div>';
+    }
+    if (slash) {
+      var nn = axNames(pc, type), pp = axPcs(pc, type);
+      h += '<div class="dgp-c"><span class="dgp-sl">Baixo trocado</span><div class="pill wrap" role="group" aria-label="Baixo trocado"><button data-abs="-1" aria-pressed="' + (bass === null || bass === undefined) + '">Nenhum</button>' +
+        pp.slice(1).map(function (p, i) { return '<button data-abs="' + p + '" aria-pressed="' + (p === bass) + '">' + nn[i + 1] + '</button>'; }).join("") + '</div></div>';
+    }
+    return { html: h, v: v, key: key };
+  }
+  function axPanelClick(e, ctx, repaint) {
+    var b = e.target.closest("button"); if (!b) return;
+    var d = b.dataset;
+    if (d.aplay) { if (ctx.v) playVoicing(ctx.v); return; }
+    if (d.av !== undefined) ax.voi[ctx.key] = +d.av;
+    else if (d.abr !== undefined) ax.br = +d.abr;
+    else if (d.abl !== undefined) ax.bl = d.abl;
+    else if (d.abs !== undefined) ax.bass = +d.abs < 0 ? null : +d.abs;
+    else return;
+    repaint();
+  }
+
+  /* campo harmônico (Círculo): o painel segue o acorde tocado ou o último escolhido */
+  var dgSig = "", dgPanel = document.getElementById("dgPanel");
+  function paintDiagram() {
+    if (!dgPanel) return;
+    var info = keyInfo(), d = playing >= 0 ? playing : st.sel, c = info.chords[d], pc = pcOf(c.root), type = c.q === "d" ? "dim" : c.q, key = axKey(pc, type, null), vi = ax.voi[key] || 0;
+    var sig = [st.p, st.mode, st.nt, st.inst, d, vi, ax.br, ax.bl].join("|");
+    if (sig === dgSig) return; dgSig = sig;
+    var sub = roman(d, c.q) + " grau · " + (c.q === "m" ? "menor" : c.q === "d" ? "diminuto" : "maior"), P = axPanelHTML(pc, type, null, sub, false, c.root);
+    dgCtx.v = P.v; dgCtx.key = P.key; dgPanel.innerHTML = P.html;
+  }
+  if (dgPanel) dgPanel.addEventListener("click", function (e) { axPanelClick(e, dgCtx, function () { dgSig = ""; paintDiagram(); }); });
+
+  /* ---------- aba Acordes ---------- */
   var axV = document.getElementById("vChords");
   function axPaint(force) {
     if (!axV || axV.hidden) return;
-    var pc = ax.root, t = ax.type, key = st.inst + "|" + pc + "|" + t, vs = axVoic(pc, t), vi = Math.min(ax.voi[key] || 0, vs.length - 1);
-    var sig = [st.inst, st.nt, pc, ax.cls, t, vi, ax.br, ax.bl].join("|");
-    if (!force && sig === axSig) return; axSig = sig; axKey = key;
-    var v = vs[vi], nm = axName(pc, t), C = AX_C.filter(function (c) { return c.id === ax.cls; })[0], isB = st.inst === "baixo";
+    var pc = ax.root, t = ax.type, bass = ax.bass, key = axKey(pc, t, bass), vi = ax.voi[key] || 0;
+    var sig = [st.inst, st.nt, pc, ax.cls, t, bass, vi, ax.br, ax.bl].join("|");
+    if (!force && sig === axSig) return; axSig = sig;
+    var C = AX_C.filter(function (c) { return c.id === ax.cls; })[0], isB = st.inst === "baixo";
     document.getElementById("axIns").innerHTML = [["violao", "Violão"], ["baixo", "Baixo"], ["teclado", "Teclado"]].map(function (x) { return '<button data-ai="' + x[0] + '" aria-pressed="' + (st.inst === x[0]) + '">' + x[1] + '</button>'; }).join("");
     document.getElementById("axRoots").innerHTML = AX_RN.map(function (n, i) { return '<button class="axroot" data-ar="' + i + '" aria-pressed="' + (i === pc) + '">' + fmt(n) + '<small>' + (AX_ALT[i] ? fmt(AX_ALT[i]) : "") + '</small></button>'; }).join("");
     document.getElementById("axCls").innerHTML = AX_C.map(function (c) { return '<button data-ac="' + c.id + '" aria-pressed="' + (c.id === ax.cls) + '">' + c.n + '</button>'; }).join("");
     document.getElementById("axClsD").textContent = C.d;
     document.getElementById("axGrid").innerHTML = C.t.map(function (x) {
-      var n2 = axName(pc, x), dot = AX_FIELD[x] ? "<i></i>" : "";
+      var n2 = axName(pc, x, null), dot = AX_FIELD[x] ? "<i></i>" : "";
       if (isB) return '<button class="axcard" data-at="' + x + '" aria-pressed="' + (x === t) + '">' + dot + '<b>' + n2 + '</b><small>' + AX_T[x].n + '</small><span class="tn">' + axNames(pc, x).join(" · ") + '</span><span class="dg">' + axDegs(x).join(" · ") + '</span></button>';
-      return '<button class="axcard' + (st.inst === "violao" ? "" : " p") + '" data-at="' + x + '" aria-pressed="' + (x === t) + '">' + dot + '<b>' + n2 + '</b><small>' + AX_T[x].n + '</small>' + axFigure(axVoic(pc, x)[0], pc, n2) + '</button>';
+      return '<button class="axcard' + (st.inst === "violao" ? "" : " p") + '" data-at="' + x + '" aria-pressed="' + (x === t) + '">' + dot + '<b>' + n2 + '</b><small>' + AX_T[x].n + '</small>' + axFigure(axVoic(pc, x, null)[0], pc, n2, pc) + '</button>';
     }).join("");
-    var pn = document.getElementById("axPanel"), nts = axNames(pc, t).join(" · ");
-    if (isB) {
-      axCur = v;
-      pn.innerHTML = '<div class="dgp-h"><span class="inst-l">Onde tocar</span><span class="dgp-i">Baixo</span></div>' +
-        '<div class="dgp-t" style="margin-bottom:8px"><div class="dgp-n">' + nm + '</div><div class="dgp-s">' + AX_T[t].n + '</div><div class="dgp-no">Notas: ' + nts + ' &nbsp;(graus ' + axDegs(t).join(" · ") + ')</div></div>' +
-        axNeck(pc, t, AX_BR[ax.br], ax.bl, "Baixo: notas de " + nm) +
-        '<div class="dgp-c"><div class="pill wrap" role="group" aria-label="Região do braço">' + AX_BR.map(function (x, i) { return '<button data-abr="' + i + '" aria-pressed="' + (i === ax.br) + '">' + x[0] + '</button>'; }).join("") + '</div></div>' +
-        '<div class="dgp-c"><div class="pill" role="group" aria-label="Mostrar"><button data-abl="g" aria-pressed="' + (ax.bl === "g") + '">Graus</button><button data-abl="n" aria-pressed="' + (ax.bl === "n") + '">Notas</button></div><button class="dgp-play" data-aplay="1" style="margin-top:0">' + PLAY + 'Ouvir arpejo</button></div>' +
-        '<div class="axleg" style="margin-top:8px"><i style="background:var(--ton)"></i> fundamental &nbsp; <i style="background:var(--brand)"></i> outras notas do acorde</div>';
-      return;
-    }
-    axCur = v;
-    var ps = v.k === "g" && Math.max.apply(null, v.fr) > 4 ? " · a partir da " + Math.min.apply(null, v.fr.filter(function (x) { return x > 0; })) + "ª casa" : "";
-    pn.innerHTML = '<div class="dgp-h"><span class="inst-l">Como tocar</span><span class="dgp-i">' + INS_NAME[st.inst] + '</span></div>' +
-      '<div class="dgp-b' + (v.k === "p" ? " col" : "") + '"><button class="dgp-fig" data-aplay="1" aria-label="Ouvir">' + axFigure(v, pc, nm) + '</button>' +
-      '<div class="dgp-t"><div class="dgp-n">' + nm + '</div><div class="dgp-s">' + AX_T[t].n + '</div><div class="dgp-no">Notas: ' + nts + '</div>' +
-      '<div class="dgp-l">' + v.label + ps + '</div><button class="dgp-play" data-aplay="1">' + PLAY + 'Ouvir</button></div></div>' +
-      '<div class="dgp-c"><div class="pill" role="group" aria-label="Posição">' + vs.map(function (x, i) { return '<button data-av="' + i + '" aria-pressed="' + (i === vi) + '">' + (i + 1) + '</button>'; }).join("") + '</div><small>' + (vs.length > 1 ? "outras formas de tocar este acorde" : "uma forma") + '</small></div>';
+    var P = axPanelHTML(pc, t, bass, AX_T[t].n, true); axCtx.v = P.v; axCtx.key = P.key; document.getElementById("axPanel").innerHTML = P.html;
   }
+  /* busca: aceita Am7, F#m, Bb7, C/E, Cmaj7, C7M, Cm7(b5), Sol maior, Lá menor... */
+  var AX_SUF = { "": "M", maj: "M", major: "M", maior: "M", m: "m", min: "m", menor: "m", dim: "dim", aug: "aug", "+": "aug", "7": "7", m7: "m7", min7: "m7", maj7: "maj7", m7b5: "m7b5", dim7: "dim7", sus2: "sus2", sus4: "sus4", sus: "sus4", "7sus4": "7sus4", "7sus": "7sus4", "6": "6", m6: "m6", add9: "add9", "9": "9", m9: "m9", maj9: "maj9", "11": "11", m11: "m11", "13": "13", "7b5": "7b5", "7b9": "7b9", "7#9": "7#9" };
+  function axSuf(s) {
+    s = s.replace(/[()\s]/g, "").replace(/♯/g, "#").replace(/♭/g, "b").replace(/[△Δ]/g, "maj").replace(/[°º]/g, "dim").replace(/ø/g, "m7b5");
+    s = s.replace(/^7M9$/, "maj9").replace(/^7M$/, "maj7").replace(/^M(?=\d|$)/, "maj");
+    s = s.toLowerCase().replace(/^-(?=\d|$)/, "m").replace(/-/g, "b").replace(/\+9/, "#9").replace(/^(5\+|5#)$/, "+");
+    return AX_SUF[s];
+  }
+  function axNote(str) {
+    var s = str.normalize("NFD").replace(/[̀-ͯ]/g, ""), m, pc, acc, N = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 }, P = { do: 0, re: 2, mi: 4, fa: 5, sol: 7, la: 9, si: 11 }, out = [];
+    m = /^(do|re|mi|fa|sol|la|si)([#b♯♭]?)(.*)$/i.exec(s);
+    if (m) { acc = m[2] === "#" || m[2] === "♯" ? 1 : m[2] ? -1 : 0; out.push({ pc: (P[m[1].toLowerCase()] + acc + 12) % 12, rest: m[3] }); }
+    m = /^([A-Ga-g])([#b♯♭]?)(.*)$/.exec(s);
+    if (m) { acc = m[2] === "#" || m[2] === "♯" ? 1 : m[2] ? -1 : 0; out.push({ pc: (N[m[1].toLowerCase()] + acc + 12) % 12, rest: m[3] }); }
+    return out;
+  }
+  function axParse(q) {
+    q = q.trim(); if (!q) return null;
+    var parts = q.split("/"), cands = axNote(parts[0].replace(/\s+/g, " ")), i, c, type;
+    for (i = 0; i < cands.length; i++) {
+      c = cands[i]; type = axSuf(c.rest.trim().replace(/^\s+/, ""));
+      if (!type) continue;
+      var res = { pc: c.pc, type: type, bass: null };
+      if (parts.length > 1) {
+        var bn = axNote(parts[1].trim()).filter(function (x) { return x.rest.trim() === ""; })[0];
+        if (!bn) return { err: "Não reconheci o baixo depois da barra. Exemplo: C/E." };
+        if (bn.pc !== c.pc) { if (axPcs(c.pc, type).indexOf(bn.pc) < 0) return { err: "O baixo trocado precisa ser uma nota do acorde (ex.: C/E, C/G)." }; res.bass = bn.pc; }
+      }
+      return res;
+    }
+    return { err: "Não reconheci esse acorde. Exemplos: Am7, F#m, Bb7, Cmaj7, C/E, Sol maior." };
+  }
+  var axQ = document.getElementById("axQ"), axQm = document.getElementById("axQm");
+  if (axQ) axQ.addEventListener("input", function () {
+    var r = axParse(axQ.value);
+    if (!r) { axQm.textContent = ""; return; }
+    if (r.err) { axQm.textContent = r.err; return; }
+    axQm.textContent = "";
+    ax.root = r.pc; ax.type = r.type; ax.bass = r.bass;
+    ax.cls = AX_C.filter(function (c) { return c.t.indexOf(r.type) >= 0; })[0].id;
+    axPaint(true);
+  });
   if (axV) axV.addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     var d = b.dataset;
     if (d.ai) { st.inst = d.ai; try { localStorage.setItem("cq-inst", st.inst); } catch (x) {} stopAll(); if (audio()) loadSamples(st.inst); paintPanel(); axPaint(true); return; }
-    if (d.aplay) { if (axCur) playVoicing(axCur); return; }
-    if (d.ar) ax.root = +d.ar;
-    else if (d.ac) { ax.cls = d.ac; ax.type = AX_C.filter(function (c) { return c.id === d.ac; })[0].t[0]; }
-    else if (d.at) { ax.type = d.at; axPaint(true); if (axCur) playVoicing(axCur); return; }
-    else if (d.av) ax.voi[axKey] = +d.av;
-    else if (d.abr) ax.br = +d.abr;
-    else if (d.abl) ax.bl = d.abl;
+    if (d.ar) { ax.root = +d.ar; ax.bass = null; }
+    else if (d.ac) { ax.cls = d.ac; ax.type = AX_C.filter(function (c) { return c.id === d.ac; })[0].t[0]; ax.bass = null; }
+    else if (d.at) { ax.type = d.at; ax.bass = null; axPaint(true); if (axCtx.v) playVoicing(axCtx.v); return; }
+    else if (b.closest("#axPanel")) { axPanelClick(e, axCtx, function () { axPaint(true); }); return; }
     else return;
-    axPaint(true);
+    axQm.textContent = ""; axPaint(true);
   });
+
+  /* som da progressão com a posição escolhida: violão e teclado tocam a forma que a pessoa marcou no painel */
+  function axChoice(c) {
+    var pc = pcOf(c.root), type = c.q === "d" ? "dim" : c.q, vs = axVoic(pc, type, null);
+    return vs[Math.min(ax.voi[axKey(pc, type, null)] || 0, vs.length - 1)];
+  }
+  function voiceNotes(c) {
+    if (st.inst === "baixo") return null;
+    var v = axChoice(c); if (!v || !v.midi.length) return null;
+    if (st.inst === "violao") return v.midi;
+    var lo = Math.min.apply(null, v.midi), sh = lo < 52 ? 12 : 0;   /* mão direita no mesmo registro de antes */
+    return v.midi.map(function (m) { return m + sh; });
+  }
 
   /* ---------- painel ---------- */
   var elKey = document.getElementById("keycard"), elChords = document.getElementById("chords"), elProgs = document.getElementById("progs");

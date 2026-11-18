@@ -1,8 +1,8 @@
 /* Service worker do Círculo de Quintas: guarda o app no aparelho para abrir sem internet.
    Ao mudar qualquer arquivo do app, aumente a VERSION para os aparelhos baixarem a versão nova. */
-const VERSION = "v24.6.1";
+const VERSION = "v24.10.0";
 const CACHE = "cq-" + VERSION;
-const SAMPLES = "samples-v1";   /* gravações dos instrumentos: baixadas quando usadas e mantidas entre versões */
+const SAMPLES = "samples-v2";   /* gravações dos instrumentos: baixadas quando usadas e mantidas entre versões */
 /* Arquivos essenciais: se um deles falhar, a instalação falha e a versão antiga continua valendo. */
 const CORE = [
   "./", "index.html", "manifest.webmanifest",
@@ -16,7 +16,7 @@ const CORE = [
 const EXTRA = [
   "drums/LICENSE.txt", "drums/drum_bass_hard.flac", "drums/drum_bass_soft.flac", "drums/drum_heavy_kick.flac", "drums/drum_snare_hard.flac", "drums/drum_snare_soft.flac",
   "drums/drum_cymbal_closed.flac", "drums/drum_cymbal_pedal.flac", "drums/drum_cymbal_open.flac", "drums/drum_cymbal_soft.flac", "drums/drum_tom_hi_soft.flac", "drums/drum_tom_mid_soft.flac", "drums/drum_tom_lo_soft.flac",
-  "licenses/index.html", "privacidade/index.html", "licenses/apache-2.0.txt", "licenses/sora-OFL.txt", "licenses/dm-sans-OFL.txt", "licenses/old-standard-tt-OFL.txt"
+  "licenses/index.html", "privacidade/index.html", "termos/index.html", "licenses/apache-2.0.txt", "licenses/sora-OFL.txt", "licenses/dm-sans-OFL.txt", "licenses/old-standard-tt-OFL.txt"
 ];
 
 /* Ao instalar, baixa cada arquivo ignorando o cache do navegador (cache: "reload"). Sem isso, o GitHub Pages
@@ -41,7 +41,7 @@ self.addEventListener("message", (e) => {
 
 self.addEventListener("activate", (e) => {
   e.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith("cq-") && k !== CACHE).map((k) => caches.delete(k))))
+    caches.keys().then((keys) => Promise.all(keys.filter((k) => (k.startsWith("cq-") && k !== CACHE) || (k.startsWith("samples-") && k !== SAMPLES)).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
