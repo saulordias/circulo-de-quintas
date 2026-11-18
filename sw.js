@@ -1,6 +1,6 @@
-/* Service worker do Círculo de Quintas: guarda o app no aparelho para abrir sem internet.
+/* Service worker da Roda Harmônica: guarda o app no aparelho para abrir sem internet.
    Ao mudar qualquer arquivo do app, aumente a VERSION para os aparelhos baixarem a versão nova. */
-const VERSION = "v24.11.1";
+const VERSION = "v25.0.0";
 const CACHE = "cq-" + VERSION;
 const SAMPLES = "samples-v3";   /* gravações dos instrumentos: baixadas quando usadas e mantidas entre versões */
 /* Arquivos essenciais: se um deles falhar, a instalação falha e a versão antiga continua valendo. */

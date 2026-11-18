@@ -14,6 +14,6 @@ Baixo elétrico: "FashionBass" (Killer KB-Simmony), tocado e mapeado por D. Smol
   Copyright 2014 Karoryfer Lecolds. CC0 1.0. Fonte: https://github.com/sfzinstruments/karoryfer.fashionbass
   Texto do autor: "Royalty-free for all commercial and non-commercial use".
 
-Alterações feitas no Círculo de Quintas: seleção de algumas notas de cada instrumento, aparadas no tamanho, com saída
+Alterações feitas na Roda Harmônica: seleção de algumas notas de cada instrumento, aparadas no tamanho, com saída
 suave no fim, volume igualado e conversão para MP3. O app toca cada nota com a altura ajustada para cobrir as demais.
-Os autores não têm vínculo com o Círculo de Quintas nem o endossam.
+Os autores não têm vínculo com a Roda Harmônica nem a endossam.

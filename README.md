@@ -1,4 +1,4 @@
-# Círculo de Quintas
+# Roda Harmônica
 
 App para estudar e praticar música no celular. Funciona no navegador e pode ser instalado na tela inicial (PWA), inclusive sem internet.
 
@@ -44,4 +44,4 @@ O app não coleta nem envia dados pessoais. Veja a [política de privacidade](pr
 
 ## Direitos
 
-O código, o logo e os desenhos do Círculo de Quintas são de Saulo Dias. © 2026 Saulo Dias. Todos os direitos reservados. Os componentes de terceiros continuam sob as licenças de cada autor.
+O código, o logo e os desenhos da Roda Harmônica são de Saulo Dias. © 2026 Saulo Dias. Todos os direitos reservados. Os componentes de terceiros continuam sob as licenças de cada autor.

@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Círculo de Quintas",
-  "short_name": "Quintas",
-  "description": "Círculo de quintas interativo e afinador, com campo harmônico, progressões e ritmos.",
+  "name": "Roda Harmônica",
+  "short_name": "Roda Harmônica",
+  "description": "Roda Harmônica: círculo de quintas interativo, acordes, afinador, campo harmônico, progressões e ritmos.",
   "lang": "pt-BR",
   "start_url": "./",
   "scope": "./",

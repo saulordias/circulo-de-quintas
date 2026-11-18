@@ -1,6 +1,6 @@
 # Licenças de terceiros
 
-O Círculo de Quintas usa os componentes abaixo, todos de uso livre. Os textos completos das licenças estão na pasta `licenses/`.
+A Roda Harmônica usa os componentes abaixo, todos de uso livre. Os textos completos das licenças estão na pasta `licenses/`.
 
 | Componente | Uso | Licença | Arquivo |
 |---|---|---|---|
