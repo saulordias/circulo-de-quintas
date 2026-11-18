@@ -1,6 +1,6 @@
 /* Service worker do Círculo de Quintas: guarda o app no aparelho para abrir sem internet.
    Ao mudar qualquer arquivo do app, aumente a VERSION para os aparelhos baixarem a versão nova. */
-const VERSION = "v22";
+const VERSION = "v23";
 const CACHE = "cq-" + VERSION;
 const ASSETS = [
   "./", "index.html", "manifest.webmanifest",
@@ -59,6 +59,7 @@ async function cacheFirst(req) {
 self.addEventListener("fetch", (e) => {
   const req = e.request, url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== location.origin) return;
+  if (url.pathname.endsWith("/sw.js")) return;   /* o navegador confere o sw.js direto na rede */
   const isPage = req.mode === "navigate" || url.pathname.endsWith("/") || url.pathname.endsWith(".html");
   e.respondWith(isPage ? networkFirst(req) : cacheFirst(req));
 });
