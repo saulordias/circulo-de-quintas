@@ -1,18 +1,19 @@
 Gravações dos instrumentos (pasta samples/)
 
-Piano (teclado): "Salamander Grand Piano" (Yamaha C5), de Alexander Holm.
-  Licença Creative Commons Attribution 3.0 (CC BY 3.0): https://creativecommons.org/licenses/by/3.0/
-  Uso livre, inclusive comercial, mantendo o crédito ao autor, o link da licença e a indicação das alterações.
-  Cópia usada via Tone.js (tonejs.github.io).
+Todas as gravações abaixo estão em domínio público (Creative Commons CC0 1.0): uso livre, inclusive comercial,
+sem exigência de crédito. Os créditos são por cortesia. Texto da licença: https://creativecommons.org/publicdomain/zero/1.0/
+
+Piano (teclado): "Grand Piano, Kawai", da Versilian Community Sample Library (VCSL), de Versilian Studios LLC.
+  Fonte: https://github.com/sgossner/VCSL. A biblioteca declara: "Creative Commons 0 license. Essentially it's Public Domain -
+  you can do whatever you want with these sounds (even make commercial software), no royalties, no credit, no special terms."
 
 Violão (nylon): "Spanish Classical Guitar", do projeto FreePats (https://freepats.zenvoid.org/Guitar/acoustic-guitar.html),
-  de roberto@zenvoid.org, gravado em 2008. Dedicado ao domínio público: Creative Commons CC0 1.0
-  (https://creativecommons.org/publicdomain/zero/1.0/). Uso livre, inclusive comercial, sem exigência de crédito.
+  de roberto@zenvoid.org, gravado em 2008. Dedicado ao domínio público (CC0 1.0).
 
 Baixo elétrico: "FashionBass" (Killer KB-Simmony), tocado e mapeado por D. Smolken, da Karoryfer Samples.
-  Copyright 2014 Karoryfer Lecolds. Creative Commons CC0 1.0. Fonte: https://github.com/sfzinstruments/karoryfer.fashionbass
-  Texto do autor: "Royalty-free for all commercial and non-commercial use". Sem exigência de crédito.
+  Copyright 2014 Karoryfer Lecolds. CC0 1.0. Fonte: https://github.com/sfzinstruments/karoryfer.fashionbass
+  Texto do autor: "Royalty-free for all commercial and non-commercial use".
 
 Alterações feitas no Círculo de Quintas: seleção de algumas notas de cada instrumento, aparadas no tamanho, com saída
 suave no fim, volume igualado e conversão para MP3. O app toca cada nota com a altura ajustada para cobrir as demais.
-O crédito aos autores do violão e do baixo é por cortesia. Os autores não têm vínculo com o Círculo de Quintas nem o endossam.
+Os autores não têm vínculo com o Círculo de Quintas nem o endossam.
