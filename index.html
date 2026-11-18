@@ -270,6 +270,12 @@ header { position: relative; justify-content: center; min-height: 46px; }
 .mt-help b { color: var(--fg); }
 #mtWeightG { cursor: grab; }
 #mtWeightG:active { cursor: grabbing; }
+/* divisor entre assuntos: linha fina que acende no meio e some nas pontas; cresce do meio ao aparecer na tela */
+.dv { position: relative; height: 24px; margin: 14px 0 10px; }
+.dv i { position: absolute; left: 0; right: 0; top: 11px; height: 1px; background: linear-gradient(90deg, transparent, var(--brand) 50%, transparent); transform-origin: center; transition: transform .8s cubic-bezier(.2, .7, .2, 1), opacity .8s; }
+.dv i::after { content: ""; position: absolute; left: 30%; right: 30%; top: -2px; height: 5px; background: radial-gradient(closest-side, rgba(139, 124, 255, .5), transparent); }
+.dvjs .dv:not(.in) i { transform: scaleX(0); opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .dv i { transition: none; } .dvjs .dv:not(.in) i { transform: none; opacity: 1; } }
 .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
 .sec-head h3 { margin: 0; }
 .progs { display: grid; gap: 8px; }
@@ -375,6 +381,8 @@ header { position: relative; justify-content: center; min-height: 46px; }
 
   <div class="legend" id="legend"></div>
 
+  <div class="dv" aria-hidden="true"><i></i></div>
+
   <div class="bar">
     <div class="pill" role="group" aria-label="Modo">
       <button id="md-M" aria-pressed="true">Maior</button>
@@ -394,11 +402,15 @@ header { position: relative; justify-content: center; min-height: 46px; }
 
   <section class="card" id="keycard"></section>
 
+  <div class="dv" aria-hidden="true"><i></i></div>
+
   <section>
     <h3>Campo harmônico</h3>
     <div class="grid" id="chords"></div>
     <p class="tip" style="margin-top:10px">Toque em um acorde para ouvir.</p>
   </section>
+
+  <div class="dv" aria-hidden="true"><i></i></div>
 
   <section>
     <div class="sec-head">
@@ -1763,6 +1775,16 @@ header { position: relative; justify-content: center; min-height: 46px; }
       });
     }).catch(function () { done("Não deu para verificar agora."); });
   };
+})();
+</script>
+<script>
+/* divisores: a linha cresce do meio quando entra na tela */
+(function () {
+  var d = document.querySelectorAll(".dv");
+  if (!("IntersectionObserver" in window)) return;
+  document.documentElement.classList.add("dvjs");
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: 0.6 });
+  Array.prototype.forEach.call(d, function (e) { io.observe(e); });
 })();
 </script>
 </body>
