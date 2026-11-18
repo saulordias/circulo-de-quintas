@@ -4,6 +4,5 @@ Piano (teclado): "Salamander Grand Piano" (Yamaha C5), de Alexander Holm. Creati
   https://creativecommons.org/licenses/by/3.0/  - cópia usada via Tone.js (tonejs.github.io/audio/salamander).
 Violão (nylon): gravação "classicalguitar-multisampled" (freesound.org), via o projeto tonejs-instruments, de Nicholas Brosowsky.
 Baixo elétrico: amostras do Karoryfer Samples, via tonejs-instruments.
-Órgão: amostras da Versilian Studios (VSCO 2 Community Edition), via tonejs-instruments.
 tonejs-instruments: https://github.com/nbrosowsky/tonejs-instruments - código MIT; amostras CC BY 3.0 (créditos em sample-source-info.txt do projeto).
 As gravações foram cortadas para a seleção de notas usada no app. Licença CC BY 3.0: uso livre, inclusive comercial, mantendo o crédito.
