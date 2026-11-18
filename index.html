@@ -726,7 +726,45 @@ header { position: relative; justify-content: center; min-height: 46px; }
     b.gain.setTargetAtTime(0, ac.currentTime, 0.02);
     setTimeout(function () { try { b.disconnect(); } catch (e) {} }, 400);
   }
+  /* sons reais dos instrumentos: gravações de verdade, baixadas só quando o instrumento é usado e guardadas no aparelho.
+     Cada nota usa a gravação mais próxima, mudando só um pouco a velocidade. Até carregarem (ou se faltarem),
+     vale o som sintetizado de antes. */
+  var SAMP = {
+    teclado: { dir: "piano", n: "C2 Ds2 Fs2 A2 C3 Ds3 Fs3 A3 C4 Ds4 Fs4 A4 C5 Ds5 Fs5 A5 C6", g: 4.5, rel: 0.45 },
+    violao: { dir: "violao", n: "B1 D2 E2 Fs2 Gs2 A2 B2 D3 Cs3 Fs3 A3 B3 E3 G3 Cs4 Ds4 Fs4 Gs4 A4 B4 E4 Cs5 D5 E5 Fs5 G5 Gs5 A5 As5", g: 1.1, rel: 0.14 },
+    baixo: { dir: "baixo", n: "E1 G1 As1 Cs2 E2 G2 As2 Cs3 E3 G3", g: 2.2, rel: 0.12 },
+    orgao: { dir: "orgao", n: "C2 Ds2 Fs2 A2 C3 Ds3 Fs3 A3 C4 Ds4 Fs4 A4 C5 Ds5", g: 3.5, rel: 0.12 }
+  };
+  function noteMidi(name) {
+    var m = /^([A-G])(s?)(\d)$/.exec(name), pc = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[m[1]];
+    return 12 * (+m[3] + 1) + pc + (m[2] ? 1 : 0);
+  }
+  function loadSamples(ins) {
+    var S = SAMP[ins]; if (!S || S.loading || !ac) return; S.loading = true; S.buf = {}; var left = 0, names = S.n.split(" ");
+    left = names.length;
+    names.forEach(function (nm) {
+      fetch("samples/" + S.dir + "/" + nm + ".mp3").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
+        .then(function (b) { return new Promise(function (ok, no) { ac.decodeAudioData(b, ok, no); }); })
+        .then(function (buf) { S.buf[noteMidi(nm)] = buf; }).catch(function () {})
+        .then(function () { if (--left === 0) S.ready = Object.keys(S.buf).length >= names.length * 0.6; });
+    });
+  }
+  function sampNote(ins, midi, t, dur, vol) {
+    var S = SAMP[ins]; if (!S) return false;
+    if (!S.ready) { loadSamples(ins); return false; }
+    var best = null, k, d;
+    for (k in S.buf) { d = Math.abs(midi - k); if (best === null || d < Math.abs(midi - best)) best = +k; }
+    if (best === null || Math.abs(midi - best) > 6) return false;
+    var src = ac.createBufferSource(), g = ac.createGain(), lvl = Math.min(1.2, vol * S.g), end = t + Math.max(0.08, dur);
+    src.buffer = S.buf[best]; src.playbackRate.value = tune * Math.pow(2, (midi - best) / 12);
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(lvl, t + 0.004);
+    g.gain.setValueAtTime(lvl, end); g.gain.exponentialRampToValueAtTime(0.0001, end + S.rel);
+    src.connect(g); g.connect(getBus());
+    src.start(t); src.stop(end + S.rel + 0.05);
+    return true;
+  }
   function tone(midi, t, dur, vol) {
+    if (sampNote("teclado", midi, t, dur, vol)) return;
     if (synNote("teclado", midi, t, dur, vol)) return;
     /* timbre de teclado: parciais somados, ataque macio, sustentação longa, brilho que apaga devagar */
     var f = 440 * Math.pow(2, (midi - 69) / 12), dest = getBus();
@@ -773,6 +811,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     ksCache[midi] = { buf: buf, rate: sr / N / f }; return ksCache[midi];
   }
   function pluck(midi, t, dur, vol) {
+    if (sampNote("violao", midi, t, Math.min(dur, 3), vol)) return;
     var f = 440 * Math.pow(2, (midi - 69) / 12), d = Math.min(dur, 3), rel = Math.min(0.25, d * 0.4), k = pluckBuf(midi);
     var src = ac.createBufferSource(), g = ac.createGain(), lp = ac.createBiquadFilter(), body = ac.createBiquadFilter(), body2 = ac.createBiquadFilter();
     src.buffer = k.buf; src.playbackRate.value = tune * k.rate;
@@ -810,6 +849,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     bsCache[midi] = buf; return buf;
   }
   function bass(midi, t, dur, vol) {
+    if (sampNote("baixo", midi, t, Math.min(dur, 3.6), vol)) return;
     if (synNote("baixo", midi, t, dur, vol)) return;
     var f = 440 * Math.pow(2, (midi - 69) / 12), d = Math.min(dur, 3.6), rel = Math.min(0.22, d * 0.25);
     var src = ac.createBufferSource(), lp = ac.createBiquadFilter(), mid = ac.createBiquadFilter(), g = ac.createGain();
@@ -827,6 +867,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
   }
   /* órgão: harmônicos sustentados, solta ao fim */
   function organ(midi, t, sus, vol) {
+    if (sampNote("orgao", midi, t, sus + 0.1, vol)) return;
     if (synNote("orgao", midi, t, sus + 0.1, vol)) return;
     var f = 440 * Math.pow(2, (midi - 69) / 12), g = ac.createGain();
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.03);
@@ -1261,6 +1302,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
     paintPanel();
   }
 
+  document.addEventListener("pointerdown", function first() { document.removeEventListener("pointerdown", first); if (audio()) loadSamples(st.inst); });
   document.getElementById("md-M").onclick = function () { st.mode = "M"; stopAll(); render(); };
   document.getElementById("md-m").onclick = function () { st.mode = "m"; stopAll(); render(); };
   Array.prototype.forEach.call(document.querySelectorAll("[data-inst]"), function (b) {
@@ -1268,6 +1310,7 @@ header { position: relative; justify-content: center; min-height: 46px; }
       st.inst = b.dataset.inst;
       try { localStorage.setItem("cq-inst", st.inst); } catch (e) {}
       stopAll(); paintPanel();   /* só troca o instrumento, sem tocar */
+      if (audio()) loadSamples(st.inst);
     };
   });
   Array.prototype.forEach.call(document.querySelectorAll("[data-r]"), function (b) {

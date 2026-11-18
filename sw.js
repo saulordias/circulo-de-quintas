@@ -1,7 +1,8 @@
 /* Service worker do Círculo de Quintas: guarda o app no aparelho para abrir sem internet.
    Ao mudar qualquer arquivo do app, aumente a VERSION para os aparelhos baixarem a versão nova. */
-const VERSION = "v24.1.1";
+const VERSION = "v24.2.0";
 const CACHE = "cq-" + VERSION;
+const SAMPLES = "samples-v1";   /* gravações dos instrumentos: baixadas quando usadas e mantidas entre versões */
 /* Arquivos essenciais: se um deles falhar, a instalação falha e a versão antiga continua valendo. */
 const CORE = [
   "./", "index.html", "manifest.webmanifest",
@@ -69,10 +70,17 @@ async function cacheFirst(req) {
   } catch (err) { return Response.error(); }
 }
 
+async function sampleFirst(req) {
+  const c = await caches.open(SAMPLES), hit = await c.match(req);
+  if (hit) return hit;
+  try { const res = await fetch(req); if (res.ok) c.put(req, res.clone()); return res; } catch (err) { return Response.error(); }
+}
+
 self.addEventListener("fetch", (e) => {
   const req = e.request, url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== location.origin) return;
   if (url.pathname.endsWith("/sw.js")) return;   /* o navegador confere o sw.js direto na rede */
+  if (url.pathname.includes("/samples/")) { e.respondWith(sampleFirst(req)); return; }
   const isPage = req.mode === "navigate" || url.pathname.endsWith("/") || url.pathname.endsWith(".html");
   e.respondWith(isPage ? networkFirst(req) : cacheFirst(req));
 });
