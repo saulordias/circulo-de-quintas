@@ -15,7 +15,7 @@ O Círculo de Quintas usa os componentes abaixo, todos de uso livre. Os textos c
 
 ## Observações
 
-- A biblioteca de som é distribuída sem alterações, no arquivo original. As correções do app são feitas no código do próprio app (`index.html`), e não dentro dela.
+- A biblioteca de som é distribuída sem alterações no código. Foi acrescentado apenas um comentário no início do arquivo, com o nome do autor, o endereço do projeto e o aviso da licença Apache 2.0. As correções do app são feitas no código do próprio app (`index.html`), e não dentro dela.
 - As fontes foram reduzidas ao subconjunto latino, que cobre o português. A licença OFL permite isso desde que o nome reservado da fonte não seja usado para a versão modificada. Aqui os arquivos são os mesmos servidos pelo Google Fonts.
 - Todas as gravações dos instrumentos e a bateria são CC0 (domínio público), sem exigência de crédito. Os créditos em `samples/LICENSE.txt`, na página de licenças e no rodapé do app são por cortesia.
 - O app tem um link para um vídeo do YouTube, de terceiros. Ele só abre o vídeo no YouTube (nada é copiado ou incorporado) e vem com aviso de que o conteúdo é de responsabilidade do autor. YouTube é marca do Google LLC, sem vínculo com o app.
